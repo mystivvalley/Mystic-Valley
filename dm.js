@@ -1,3 +1,13 @@
+function operationUUID() {
+ const c = globalThis.crypto;
+ if (typeof c?.randomUUID === 'function') return c.randomUUID();
+ if (typeof c?.getRandomValues !== 'function') throw Error('Dieser Browser unterstützt keine sicheren Zufallszahlen. Bitte einen aktuellen Browser verwenden.');
+ const bytes = c.getRandomValues(new Uint8Array(16));
+ bytes[6] = (bytes[6] & 15) | 64;
+ bytes[8] = (bytes[8] & 63) | 128;
+ const h = Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
+ return `${h.slice(0,8)}-${h.slice(8,12)}-${h.slice(12,16)}-${h.slice(16,20)}-${h.slice(20)}`;
+}
 import { chatContext } from './cloud.js';
 const $=id=>document.getElementById(id),el=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;};
 let owner=null,epoch=0,peer=null,thread=null,me=null,inboxLoading=false,sending=false,until=0,inboxStamp='',feedStamp='',blockStamp='',reportStamp='',searchSeq=0;
@@ -38,7 +48,9 @@ const headerBadge=el('span','', 'dmCount');headerBadge.id='dmBadge';headerBadge.
 $('globalChatTab').onclick=()=>tab('global');$('privateChatTab').onclick=()=>tab('private');$('dmRefresh').onclick=()=>run(refresh);$('dmSearchForm').onsubmit=e=>{e.preventDefault();return run(search);};$('dmSearch').oninput=()=>{searchSeq++;$('dmSearchResults').replaceChildren();};$('dmBlock').onclick=()=>run(()=>block(peer,!thread?.blocked_by_me));$('dmModToggle').onclick=()=>run(async()=>{$('dmModeration').hidden=!$('dmModeration').hidden;if(!$('dmModeration').hidden)await reports();});
 $('dmInput').oninput=()=>{if(peer)drafts.set(peer,$('dmInput').value);controls();};$('dmInput').onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();$('dmForm').requestSubmit();}};
 $('dmMessages').addEventListener('scroll',()=>{if(privateVisible()&&$('dmMessages').scrollHeight-$('dmMessages').scrollTop-$('dmMessages').clientHeight<70)run(loadFeed);});
-$('dmForm').onsubmit=e=>{e.preventDefault();return run(async()=>{controls();if($('dmSend').disabled)return;const target=peer,id=owner,token=epoch,body=$('dmInput').value.trim();if(!body||body.length>500)throw Error('Nachricht: 1–500 Zeichen.');let op=pending(id,target);if(!op||op.body!==body)op={id:crypto.randomUUID(),body};localStorage.setItem(pendingKey(id,target),JSON.stringify(op));sending=true;controls();try{await rpc('mv_dm_send_v1',{p_peer:target,p_body:body,p_request_id:op.id});if(token!==epoch)return;localStorage.removeItem(pendingKey(id,target));drafts.delete(target);if(peer===target&&$('dmInput').value.trim()===body)$('dmInput').value='';until=Date.now()+3000;note('Private Nachricht gesendet.');await refresh();}finally{if(token===epoch){sending=false;controls();}}});};
+$('dmForm').onsubmit=e=>{e.preventDefault();return run(async()=>{controls();if($('dmSend').disabled)return;const target=peer,id=owner,token=epoch,body=$('dmInput').value.trim();if(!body||body.length>500)throw Error('Nachricht: 1–500 Zeichen.');let op=pending(id,target);if(!op||op.body!==body)op={id:operationUUID(),body};localStorage.setItem(pendingKey(id,target),JSON.stringify(op));sending=true;controls();try{await rpc('mv_dm_send_v1',{p_peer:target,p_body:body,p_request_id:op.id});if(token!==epoch)return;localStorage.removeItem(pendingKey(id,target));drafts.delete(target);if(peer===target&&$('dmInput').value.trim()===body)$('dmInput').value='';until=Date.now()+3000;note('Private Nachricht gesendet.');await refresh();}finally{if(token===epoch){sending=false;controls();}}});};
 window.addEventListener('mv-cloud-state',cloudState);window.addEventListener('online',()=>{if(chatContext().ready)run(refresh);});window.addEventListener('focus',()=>{if(privateVisible())run(refresh);});document.addEventListener('visibilitychange',()=>{if(document.visibilityState!=='hidden'&&chatContext().ready)run(refresh);});
 setInterval(()=>{if(chatContext().ready&&document.visibilityState!=='hidden')run(refresh);},5000);setInterval(()=>{if(privateVisible())controls();},500);
-window.mysticPrivateChat={opened:()=>run(refresh)};cloudState();
+window.mysticPrivateChat={opened:()=>run(refresh),openPeer:id=>run(async()=>{ctx();$('chatPopup').hidden=false;tab('private');await select(id);})};cloudState();
+
+$('dmPeerName').onclick=()=>{if(peer)window.mysticSocial?.profile(peer);};$('dmPeerName').tabIndex=0;$('dmPeerName').setAttribute('role','button');$('dmPeerName').title='Spielerprofil öffnen';$('dmPeerName').onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();$('dmPeerName').click();}};

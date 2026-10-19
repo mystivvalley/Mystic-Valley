@@ -1,3 +1,13 @@
+function operationUUID() {
+ const c = globalThis.crypto;
+ if (typeof c?.randomUUID === 'function') return c.randomUUID();
+ if (typeof c?.getRandomValues !== 'function') throw Error('Dieser Browser unterstützt keine sicheren Zufallszahlen. Bitte einen aktuellen Browser verwenden.');
+ const bytes = c.getRandomValues(new Uint8Array(16));
+ bytes[6] = (bytes[6] & 15) | 64;
+ bytes[8] = (bytes[8] & 63) | 128;
+ const h = Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
+ return `${h.slice(0,8)}-${h.slice(8,12)}-${h.slice(12,16)}-${h.slice(16,20)}-${h.slice(20)}`;
+}
 // Der Aufrufer wird von cloud.js übergeben; der Mutex und die Cloud-Version bleiben dort.
 export function paymentProtocol({client, bridge, current, setRevision, backup, conflict, pause, say}) {
  const key=owner=>'mv_pending_guild_payment_v1:'+owner;
@@ -10,7 +20,7 @@ export function paymentProtocol({client, bridge, current, setRevision, backup, c
   const initial=current();if(!initial.ready||!initial.owner)throw Error('Bitte zuerst deinen Cloud-Spielstand prüfen.');
   if(!Number.isSafeInteger(amount)||amount<1)throw Error('Bitte eine positive ganze Menge eingeben.');
   if(pending(initial.owner))throw Error('Eine frühere Einzahlung ist noch offen. Bitte unter Konto & Cloud erneut prüfen.');
-  const op={id:crypto.randomUUID(),guild,project,resource,amount};
+  const op={id:operationUUID(),guild,project,resource,amount};
   localStorage.setItem(key(initial.owner),JSON.stringify(op));
   const token=initial.epoch,owner=initial.owner;
   try{

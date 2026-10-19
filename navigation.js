@@ -12,6 +12,7 @@ const tests=document.createElement('details');tests.className='testOptions';
 const summary=document.createElement('summary');summary.textContent='🧪 Testwerkzeuge';
 tests.append(summary,document.querySelector('.testToolbar'));contents.append(tests);
 const chat=$('chatOpen');$('headerChat').replaceWith(chat);chat.textContent='💬';chat.title='Globaler Chat';chat.setAttribute('aria-label','Globalen Chat öffnen');
+$('left').append($('socialOpen'));
 const guild=$('guildOpen');const guildNav=[...$('left').children].find(b=>b.textContent.includes('Gildenhaus'));guild.textContent='🏰 Gildenhaus';guildNav.replaceWith(guild);
 function setSettings(open){dropdown.hidden=!open;toggle.setAttribute('aria-expanded',String(open));if(open){$('left').classList.remove('mobileOpen');$('mobileNav').setAttribute('aria-expanded','false');}}
 toggle.onclick=()=>setSettings(dropdown.hidden);

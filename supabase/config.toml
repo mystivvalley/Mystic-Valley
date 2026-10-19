@@ -1,0 +1,2 @@
+[functions.mv-username-login]
+verify_jwt = false

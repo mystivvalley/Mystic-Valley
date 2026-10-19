@@ -1,4 +1,5 @@
 import { paymentProtocol } from './payments.js';
+import { premiumProtocol } from './premium-protocol.js';
 const URL='https://jsczrhflonkqvbhctcwk.supabase.co';
 const KEY='sb_publishable_76tCxCjmtKvTUZTEKO1LjA_Pc9PGTWN';
 const $=id=>document.getElementById(id), bridge=window.mysticValleySaveBridge;
@@ -13,6 +14,7 @@ function mark(snapshot){localStorage.setItem(META,JSON.stringify({owner:active,r
 async function fetchSave(){const {data,error}=await client.from('player_saves').select('save_data,revision,updated_at').eq('user_id',user.id).maybeSingle();if(error)throw error;return data;}
 function conflict(){ready=false;pause(true);say('Ein anderes Gerät hat inzwischen gespeichert. Dein lokaler Stand bleibt erhalten. Bitte „Cloud-Stand übernehmen“ wählen; vorher wird er automatisch gesichert.',true);}
 const payments=paymentProtocol({client:()=>client,bridge,current:()=>({owner:user?.id,epoch,revision,ready}),setRevision:(rev,snapshot)=>{revision=rev;active=user.id;mark(snapshot);},backup,conflict,pause,say});
+const premium=premiumProtocol({client:()=>client,bridge,current:()=>({owner:user?.id,epoch,revision,ready}),setRevision:(rev,snapshot)=>{revision=rev;active=user.id;mark(snapshot);},backup,conflict,pause,say});
 export async function donateToGuild(guild,project,resource,amount){
  const owner=user?.id,token=epoch,until=Date.now()+10000;
  while(busy&&Date.now()<until)await new Promise(resolve=>setTimeout(resolve,50));
@@ -21,6 +23,15 @@ export async function donateToGuild(guild,project,resource,amount){
  busy=true;
  try{return await payments.donate(guild,project,resource,amount);}
  finally{busy=false;bridge.hold(false);pause(!ready);if(pending){pending=false;queueMicrotask(()=>guard(()=>initialize()));}}
+}
+export async function spendPremium(kind,index,maxCost){
+ const owner=user?.id,token=epoch,until=Date.now()+10000;
+ while(busy&&Date.now()<until)await new Promise(resolve=>setTimeout(resolve,50));
+ if(busy)throw Error('Die Cloud ist noch beschäftigt. Bitte kurz warten.');
+ if(!ready||user?.id!==owner||epoch!==token)throw Error('Bitte zuerst den Cloud-Spielstand prüfen.');
+ busy=true;
+ try{return await premium.spend(kind,index,maxCost);}
+ finally{busy=false;bridge.hold(false);if(!ready)pause(true);if(pending){pending=false;queueMicrotask(()=>guard(()=>initialize()));}}
 }
 async function saveCloud(){
  if(!ready||!user||busy)return false;
@@ -39,7 +50,7 @@ async function initialize(forceCloud=false){
  if(busy){pending=true;return;}
  ready=false;pause(true);busy=true;const token=epoch,owner=user?.id;if(!owner){busy=false;return;}
  try{
-  say('☁️ Konto wird geprüft …');const profile=await client.rpc('mv_account_v1');if(token!==epoch||user?.id!==owner)return;if(profile.error)throw profile.error;account=profile.data;authUI();if(!account?.username){say('Bitte zuerst einen eindeutigen Benutzernamen festlegen.');return;}say('☁️ Spielstand wird geprüft …');if(payments.pending(owner))await payments.recover(owner,token);const row=await fetchSave();if(token!==epoch||user?.id!==owner)return;
+  say('☁️ Konto wird geprüft …');const profile=await client.rpc('mv_account_v1');if(token!==epoch||user?.id!==owner)return;if(profile.error)throw profile.error;account=profile.data;authUI();if(!account?.username){say('Bitte zuerst einen eindeutigen Benutzernamen festlegen.');return;}say('☁️ Spielstand wird geprüft …');if(payments.pending(owner))await payments.recover(owner,token);if(premium.pending(owner))await premium.recover(owner,token);const row=await fetchSave();if(token!==epoch||user?.id!==owner)return;
   const local=bridge.snapshot(),meta=read(META);
   if(row){
    if(!Number.isSafeInteger(row.revision))throw Error('Bitte zuerst supabase_update_2_1.sql im SQL Editor ausführen.');

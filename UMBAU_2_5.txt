@@ -1,0 +1,32 @@
+MYSTIC VALLEY – ALPHA 2.5.0 – MENÜUMBAU
+Grundlage: Alpha 2.4.0 Online-Gilden, einschließlich internem Gildenchat.
+
+INSTALLATION
+1. Sicherheitshalber den aktuellen Spielstand über Konto & Cloud sichern und lokal exportieren.
+2. Den Inhalt dieses Ordners vollständig in deinen bisherigen Website-Ordner kopieren. Dateien ersetzen, assets mitkopieren.
+3. Wie bisher über deinen Webhoster/GitHub veröffentlichen. Die bisherige Domain und den Pfad beibehalten.
+4. Seite mit Strg + F5 aktualisieren.
+Keine neue SQL-Datei für diesen Menüumbau ausführen. Bestehende Datenbank und Google-Konfiguration bleiben gültig.
+
+NEUE ANORDNUNG
+Oben: Ressourcen, Level, Chat und Zahnrad.
+Links: Spielmenü und Online-Gildenhaus.
+Rechts: einklappbare Aufgaben und Hinweise.
+Unten: Schnellzugriffe; Produktion öffnet die Produktionszentrale.
+Zahnrad oben rechts: Konto & Cloud mit Anmeldung/Registrierung/Google,
+Spielstand und Spieloptionen, aufklappbare Testwerkzeuge.
+Handy: linkes Spielmenü über das ☰-Symbol; Schnellzugriffe unten.
+Dropdown schließt per erneutem Klick, Klick außerhalb oder Escape.
+
+BESTEHENDE FUNKTIONEN
+Speicherformat und Speicherschlüssel wurden nicht geändert.
+cloud.js, chat.js, guilds.js sowie sämtliche SQL-Dateien sind unverändert.
+Der bestehende Cloud-Verbindungs-/Kontoprüfungsdialog beim Start bleibt erhalten.
+Die Dorfkarte und die 15 Gebäudepositionen bleiben erhalten.
+
+PRÜFUNG
+JavaScript-Syntax, eindeutige HTML-IDs, Elementverknüpfungen und lokale Assets geprüft.
+Originale Funktionsdateien mit Alpha 2.4 byteweise verglichen.
+Ein visueller Browsertest war in dieser Umgebung nicht möglich.
+Online-Anmeldung/Gildenberechtigungen wurden nicht erneut mit echten Konten getestet.
+Bitte nach dem Hochladen kurz Zahnrad, Produktionszentrale, Chat, Online-Gilde und Handy-Menü prüfen.

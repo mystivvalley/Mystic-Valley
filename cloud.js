@@ -1,3 +1,4 @@
+import { paymentProtocol } from './payments.js';
 const URL='https://jsczrhflonkqvbhctcwk.supabase.co';
 const KEY='sb_publishable_76tCxCjmtKvTUZTEKO1LjA_Pc9PGTWN';
 const $=id=>document.getElementById(id), bridge=window.mysticValleySaveBridge;
@@ -6,11 +7,21 @@ let client,user,active=null,revision=null,ready=false,busy=false,epoch=0,pending
 const read=k=>{try{return JSON.parse(localStorage.getItem(k)||'null')}catch{return null}};
 const say=(text,error=false)=>{$('sbFeedback').textContent=text;$('sbFeedback').className=error?'danger':'muted';$('cloudStatus').textContent=text};
 function pause(value){document.querySelector('.game').inert=value;$('sbClose').disabled=value;if(value)$('cloudPopup').hidden=false;authUI();window.dispatchEvent?.(new Event('mv-cloud-state'));}
-function backup(){const entries=read(BACKUPS)||[];entries.unshift({at:new Date().toISOString(),owner:read(META)?.owner||null,save:bridge.snapshot()});localStorage.setItem(BACKUPS,JSON.stringify(entries.slice(0,5)));}
+function backup(snapshot=bridge.snapshot()){const entries=read(BACKUPS)||[];entries.unshift({at:new Date().toISOString(),owner:read(META)?.owner||null,save:snapshot});localStorage.setItem(BACKUPS,JSON.stringify(entries.slice(0,5)));}
 function exportBackup(){const b=read(BACKUPS)?.[0];if(!b)throw Error('Noch keine Sicherung vorhanden.');const a=document.createElement('a'),u=window.URL.createObjectURL(new Blob([JSON.stringify(b.save,null,2)],{type:'application/json'}));a.href=u;a.download='mystic-valley-sicherung.json';a.click();setTimeout(()=>window.URL.revokeObjectURL(u),1000);}
 function mark(snapshot){localStorage.setItem(META,JSON.stringify({owner:active,revision,lastTick:snapshot.lastTick}));}
 async function fetchSave(){const {data,error}=await client.from('player_saves').select('save_data,revision,updated_at').eq('user_id',user.id).maybeSingle();if(error)throw error;return data;}
 function conflict(){ready=false;pause(true);say('Ein anderes Gerät hat inzwischen gespeichert. Dein lokaler Stand bleibt erhalten. Bitte „Cloud-Stand übernehmen“ wählen; vorher wird er automatisch gesichert.',true);}
+const payments=paymentProtocol({client:()=>client,bridge,current:()=>({owner:user?.id,epoch,revision,ready}),setRevision:(rev,snapshot)=>{revision=rev;active=user.id;mark(snapshot);},backup,conflict,pause,say});
+export async function donateToGuild(guild,project,resource,amount){
+ const owner=user?.id,token=epoch,until=Date.now()+10000;
+ while(busy&&Date.now()<until)await new Promise(resolve=>setTimeout(resolve,50));
+ if(busy)throw Error('Die Cloud ist noch beschäftigt. Bitte kurz warten.');
+ if(!ready||user?.id!==owner||epoch!==token)throw Error('Bitte zuerst den Cloud-Spielstand prüfen.');
+ busy=true;
+ try{return await payments.donate(guild,project,resource,amount);}
+ finally{busy=false;bridge.hold(false);pause(!ready);if(pending){pending=false;queueMicrotask(()=>guard(()=>initialize()));}}
+}
 async function saveCloud(){
  if(!ready||!user||busy)return false;
  busy=true;const token=epoch,owner=user.id,snapshot=bridge.snapshot();
@@ -28,7 +39,7 @@ async function initialize(forceCloud=false){
  if(busy){pending=true;return;}
  ready=false;pause(true);busy=true;const token=epoch,owner=user?.id;if(!owner){busy=false;return;}
  try{
-  say('☁️ Konto wird geprüft …');const profile=await client.rpc('mv_account_v1');if(token!==epoch||user?.id!==owner)return;if(profile.error)throw profile.error;account=profile.data;authUI();if(!account?.username){say('Bitte zuerst einen eindeutigen Benutzernamen festlegen.');return;}say('☁️ Spielstand wird geprüft …');const row=await fetchSave();if(token!==epoch||user?.id!==owner)return;
+  say('☁️ Konto wird geprüft …');const profile=await client.rpc('mv_account_v1');if(token!==epoch||user?.id!==owner)return;if(profile.error)throw profile.error;account=profile.data;authUI();if(!account?.username){say('Bitte zuerst einen eindeutigen Benutzernamen festlegen.');return;}say('☁️ Spielstand wird geprüft …');if(payments.pending(owner))await payments.recover(owner,token);const row=await fetchSave();if(token!==epoch||user?.id!==owner)return;
   const local=bridge.snapshot(),meta=read(META);
   if(row){
    if(!Number.isSafeInteger(row.revision))throw Error('Bitte zuerst supabase_update_2_1.sql im SQL Editor ausführen.');
@@ -44,14 +55,14 @@ async function initialize(forceCloud=false){
   }
   active=owner;mark(sameSnapshot());ready=true;pause(false);say('🟢 Angemeldet · automatische Speicherung aktiv');
  }catch(e){say('Cloud konnte nicht geladen werden: '+e.message+' · „Erneut prüfen“ anklicken.',true);}
- finally{busy=false;if(pending){pending=false;queueMicrotask(()=>guard(()=>initialize()));}}
+ finally{busy=false;bridge.hold(false);pause(!ready);if(pending){pending=false;queueMicrotask(()=>guard(()=>initialize()));}}
  if(ready)await saveCloud();
 }
 function sameSnapshot(){return bridge.snapshot();}
 async function guard(fn){try{await fn()}catch(e){say(e.message||String(e),true);}}
 function sessionChanged(next){
  const id=next?.id||null;if(id===user?.id&&id===active)return;
- user=next;account=null;epoch++;ready=false;pause(true);
+ user=next;account=null;epoch++;ready=false;bridge.setOnlineGuild(null,{});pause(true);
  if(user){active=null;guard(()=>initialize());}else{active=null;say('Bitte anmelden oder als Gast lokal spielen.');}
 }
 $('cloudOpen').onclick=()=>{$('cloudPopup').hidden=false};$('sbClose').onclick=()=>{$('cloudPopup').hidden=true};

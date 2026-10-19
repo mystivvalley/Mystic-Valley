@@ -1,30 +1,26 @@
-Mystic Valley Alpha 2.2.0 – Globaler Chat
+Mystic Valley Alpha 2.3.0 – Benutzername & Google-Anmeldung
 
-UPDATE VON 2.1 – Schritt für Schritt:
-1. Auf dem Gerät mit dem richtigen Fortschritt Jetzt sichern anklicken und Erfolgsmeldung abwarten. Optional unter Einstellungen den Spielstand exportieren.
-2. Supabase > SQL Editor > New query: Inhalt von supabase_update_2_2.sql einfügen und Run anklicken. Bestehende Spielstände und automatische Cloud-Sicherung bleiben erhalten.
-3. index.html, cloud.js, chat.js, chat.css und den Ordner assets in den bisherigen GitHub-Projektordner kopieren/ersetzen. GitHub Desktop: Commit to main > Push origin.
-4. Nach Veröffentlichung Strg+F5 auf allen Geräten. Oben muss Alpha 2.2.0 stehen.
-5. Anmelden, unter Konto & Cloud einen öffentlichen Spielernamen speichern. Über Globaler Chat den Dorfchat öffnen. Nur angemeldete Konten können lesen/schreiben.
-6. OPTIONAL Admin einrichten: admin_einrichten.sql im Editor öffnen, DEINE-LOGIN-EMAIL durch die E-Mail deines Spielkontos ersetzen. Den angepassten Inhalt in einer neuen Supabase-SQL-Abfrage ausführen. Der Chat zeigt nach Aktualisieren die Moderation. Keine E-Mail/Schlüssel werden im Chat angezeigt. Niemand wird automatisch Admin.
-7. Mit einem zweiten echten Testkonto eine Nachricht senden. Mit deinem Admin-Konto entfernen/stummschalten und die Sperre im zweiten Konto prüfen. Für gleichzeitiges Testen verschiedene Spielkonten verwenden, damit der Cloud-Versionsschutz nicht dazwischenkommt.
+NEU
+- Registrierung mit Pflicht-Benutzername, E-Mail und Passwort.
+- Benutzername: 3–24 Zeichen (A–Z, Zahlen, Unterstrich), eindeutig ohne Beachtung der Groß-/Kleinschreibung. Öffentlich im Chat. Nach der Wahl fest.
+- Login mit Benutzername + Passwort. E-Mail + Passwort bleibt für bestehende Konten möglich.
+- Mit Google anmelden. Neue Google-Spieler wählen vor dem Spieleinstieg ihren Benutzernamen. Google-Konten ohne zusätzliches Passwort melden sich weiterhin über Google an.
+- Bestehende geeignete Profilnamen werden als Benutzernamen übernommen. Bei bisher ungeeigneten/fehlenden Namen wird einmalig eine neue Wahl verlangt. Konten-IDs, Cloud-Spielstände und Chat-Adminrechte bleiben erhalten.
+- Bestehender Globalchat und automatische Cloud-Sicherung bleiben enthalten.
 
-NEUINSTALLATION:
-Einmal supabase_setup.sql ausführen; es enthält Cloud 2.1 und Chat 2.2. Nicht zusätzlich die Update-Dateien ausführen. URL und öffentlicher Publishable Key sind fest hinterlegt. SQL-Dateien müssen nicht über GitHub bereitgestellt werden.
+INSTALLATION
+Bitte ANLEITUNG_KONTEN_GOOGLE.txt vollständig lesen. Es sind drei Einrichtungen nötig: SQL-Update, eine Edge Function für den Benutzernamen-Login und der Google-Provider. Danach die Website-Dateien hochladen. Kein Docker/WSL nötig.
 
-CHAT:
-- Globaler Chat mit letzten 50 Nachrichten in zeitlicher Reihenfolge. Alle 5 Sekunden aktualisiert, solange der Chat offen und der Tab sichtbar ist. Kein Realtime-Schalter in Supabase nötig.
-- Reiner Text; HTML wird nicht ausgeführt. Links sind in dieser Version reiner Text.
-- 1–500 Zeichen, mindestens 3 Sekunden Abstand, identische Nachricht innerhalb von 60 Sekunden gesperrt. Die Datenbank erzwingt diese Regeln auch ohne die UI.
-- Melden mit Grund (3–300 Zeichen), maximal 5 Meldungen pro Minute, dieselbe Nachricht nur einmal pro Konto.
-- Eigene Nachrichten können entfernt werden. Entfernte Inhalte werden im normalen Feed nicht mehr ausgeliefert; Moderationsdaten bleiben in der Datenbank erhalten.
-- Moderation: Nachrichten entfernen, Meldungen erledigen, Spieler 10 Minuten/1 Stunde/24 Stunden stummschalten oder Sperre aufheben. Konten mit Admin-/Mod-Rolle sind über diese Buttons nicht stummschaltbar.
-- Rollen nur durch Projektinhaber per SQL/Table Editor in mv_chat_roles. Rolle admin oder mod; niemals einen service_role-Schlüssel ins Spiel einbauen. Prüfungen und Moderationsprotokoll liegen in Supabase.
-- Nach Anmeldung ohne Spielernamen können Spieler lesen. Senden erst nach Speichern des Profilnamens. E-Mail bleibt privat.
-- Bei Cloud-Konflikten oder Abmeldung schließt sich der Chat; Nachrichten und Eingabe werden aus der Ansicht entfernt.
+VALIDIERUNG
+PostgreSQL/PGlite: Upgrade und Wiederholung, Übernahme bestehender Namen/Spielstände/Adminrechte, Registrierung ohne Name abgewiesen, doppelte Namen ohne Beachtung der Groß-/Kleinschreibung abgewiesen, atomarer Rollback, Google-Onboarding, unveränderliche Benutzernamen, privater E-Mail-Resolver nur für Server, serverseitiges Loginlimit und Spieleinstieg geprüft.
+Simuliertes DOM: Pflichtfeld, Registrierung, E-Mail-Bestätigungshinweis, Benutzername-Login, Session-Übernahme, E-Mail-Login, Google-Weiterleitung/PKCE-Konfiguration, Namenswahl vor Google-Spieleinstieg, Kontentrennung getestet.
+Edge-Handler mit simuliertem Supabase Auth: gültiger/ungültiger/unbekannter Login, CORS, Requestbegrenzung, Ratelimit und ausschließlich eigene Session-Tokens in erfolgreicher Antwort getestet.
+Bestehende isolierte Cloud- und Chat-Tests bestanden. Echter Google-OAuth-Rundlauf, E-Mail-Versand und Edge-Function-Deployment sind erst nach Einrichtung deines Projekts testbar. Keine dieser Einstellungen wurde von hier aus in deinem Supabase-/Google-Konto geändert.
 
-VALIDIERUNG:
-Datenbankfunktionen mit PostgreSQL via PGlite getestet: Neuinstallation/wiederholte Migration, Authentifizierung, Rollenrechte, direktes Schreiben gesperrt, Nachrichtenlänge/Spamlimit/Duplikate, Meldungen und Privatsphäre, Stumm-/Freischalten, eigene/fremde Nachrichten, Ausblenden, Protokoll, 50er-Limit und bestehender Cloud-Versionsschutz. Oberfläche mit simuliertem DOM getestet: Spielstart, Chat öffnen/senden/melden/moderieren, HTML als Text, Sendeabstand, stumme Konten und Abmeldung. Echter Supabase-/Browser-/Zwei-Konten-Test nach Installation noch erforderlich.
-
-WEITERHIN:
-Automatische Cloud-Sicherung alle 30 Sekunden wie 2.1. Spielökonomie lokal berechnet. Gildenchat und Privatnachrichten sind in dieser Version noch nicht enthalten.
+DATEIEN
+Website: index.html, cloud.js, auth.css, chat.js, chat.css, assets.
+SQL für vorhandene Alpha 2.1/2.2: supabase_update_ab_2_1.sql.
+SQL nur für vorhandene Alpha 2.2: alternativ supabase_update_2_3.sql.
+Neuinstallation: supabase_setup.sql statt aller Updates.
+Edge Function: supabase/functions/mv-username-login/index.ts.
+Serverkonfiguration für CLI als Alternative: supabase/config.toml.

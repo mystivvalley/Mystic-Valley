@@ -5,7 +5,7 @@ const META='mv_sync_meta_v1', BACKUPS='mv_cloud_backups_v1';
 let client,user,active=null,revision=null,ready=false,busy=false,epoch=0,pending=false;
 const read=k=>{try{return JSON.parse(localStorage.getItem(k)||'null')}catch{return null}};
 const say=(text,error=false)=>{$('sbFeedback').textContent=text;$('sbFeedback').className=error?'danger':'muted';$('cloudStatus').textContent=text};
-function pause(value){document.querySelector('.game').inert=value;$('sbClose').disabled=value;if(value)$('cloudPopup').hidden=false;}
+function pause(value){document.querySelector('.game').inert=value;$('sbClose').disabled=value;if(value)$('cloudPopup').hidden=false;window.dispatchEvent?.(new Event('mv-cloud-state'));}
 function backup(){const entries=read(BACKUPS)||[];entries.unshift({at:new Date().toISOString(),owner:read(META)?.owner||null,save:bridge.snapshot()});localStorage.setItem(BACKUPS,JSON.stringify(entries.slice(0,5)));}
 function exportBackup(){const b=read(BACKUPS)?.[0];if(!b)throw Error('Noch keine Sicherung vorhanden.');const a=document.createElement('a'),u=window.URL.createObjectURL(new Blob([JSON.stringify(b.save,null,2)],{type:'application/json'}));a.href=u;a.download='mystic-valley-sicherung.json';a.click();setTimeout(()=>window.URL.revokeObjectURL(u),1000);}
 function mark(snapshot){localStorage.setItem(META,JSON.stringify({owner:active,revision,lastTick:snapshot.lastTick}));}
@@ -70,3 +70,5 @@ window.addEventListener('online',()=>guard(()=>ready?saveCloud():user?initialize
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')guard(saveCloud)});
 window.addEventListener('beforeunload',e=>{const meta=read(META),local=bridge.snapshot();if(user&&(!ready||busy||meta?.owner!==user.id||local.lastTick>(meta.lastTick||0)+2000)){e.preventDefault();e.returnValue='';}});
 guard(connect);
+
+export function chatContext(){return {client,user,ready};}

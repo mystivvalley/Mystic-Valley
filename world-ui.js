@@ -43,7 +43,7 @@ questToggle.onclick=()=>{const open=$('questSidebar').classList.toggle('questsOp
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){$('questSidebar').classList.remove('questsOpen');questToggle.setAttribute('aria-expanded','false');}});
 const guide=$('elfGuide'), key='mv_elf_tutorial_212';let step=0;
 const tips=[
- ['Willkommen in Mystic Valley!','Ich bin Mira. Repariere zuerst deine Forsthütte und bringe das Tal wieder zum Leben.','Zur Forsthütte',()=>nav.building(0)],
+ ['Willkommen in Lumertal!','Ich bin Mira. Repariere zuerst deine Forsthütte und bringe das Tal wieder zum Leben.','Zur Forsthütte',()=>nav.building(0)],
  ['Dein Dorf erwacht','Klicke nach der Reparatur erneut auf die Forsthütte und aktiviere sie. Danach produziert sie auch während deiner Abwesenheit Holz.','Forsthütte ansehen',()=>nav.building(0)],
  ['Vorräte im Blick','Oben siehst du Gold, Holz, Kristall, Mana und Sternensplitter. Im Lagerhaus findest du alle Rohstoffe und hergestellten Waren.','Lagerhaus öffnen',nav.warehouse],
  ['Kleine Ziele, große Fortschritte','Rechts stehen deine nächsten Aufgaben. Belohnungen und Tagesaufgaben findest du im Questbuch.','Zum Questbuch',nav.quests],

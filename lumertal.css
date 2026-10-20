@@ -1,0 +1,112 @@
+/* Lumertal 2.20 — brand layer. Map geometry, game state and cloud keys stay intact. */
+:root{--l-wood:#38291b;--l-wood-light:#70502b;--l-gold:#d4aa5d;--l-cream:#ffedbb;--l-leaf:#48663a;--l-paper:#f3e5c5;--l-ink:#46351e;--l-muted:#746044;--l-crystal:#81dce3;--frame:var(--l-gold);--edge:var(--l-gold);--gold:var(--l-cream);--paper:var(--l-paper)}
+body{background:#172b1c;color:var(--l-cream)}
+button,input,textarea,select{font:inherit}
+button{touch-action:manipulation}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--l-crystal);outline-offset:3px}
+.brand img{max-height:148px;object-fit:contain;filter:drop-shadow(0 4px 5px #17200c99)}
+.brand .buildTag{right:8%;bottom:0;padding:3px 7px;border:1px solid #d4aa5d99;border-radius:12px;background:#38291be8;color:#f7e3ad;font-size:9px;white-space:nowrap}
+.top .stats,.top>.xp{border-color:var(--l-gold);border-radius:9px;background:linear-gradient(115deg,#604427,#302519);box-shadow:inset 0 0 0 2px #251c15,inset 0 3px 0 #ffe2a326,0 5px 12px #16230e66}
+.top .stats .resource{border-color:#aa824a88;color:#fff0c9}
+.top .resource small{color:#e2cfa8}.top .resource strong{color:#fff0c4}
+.top .stats .premiumHeader{background:linear-gradient(110deg,#533a5f33,#8b60a12b)!important}
+.top .stats .premiumHeader small{color:#ead5ff}.top .stats .premiumHeader strong{color:#f5ddff}
+.top .xpbar{background:#231d15;border-color:#ac8646}.top .xpbar>div{background:linear-gradient(90deg,#91a84b,#f2d37e);box-shadow:0 0 8px #d9c17866}
+.headerTools button,.game .left button,.game .bottom button,#questToggle{border-color:#d3aa60;background:linear-gradient(110deg,#73522f,#48321f 52%,#392b1c);color:#ffedbc;box-shadow:inset 0 0 0 2px #2e2318,inset 0 3px #f9d99222,0 4px 9px #11201066;border-radius:8px}
+.game .left button:hover,.game .bottom button:hover,.headerTools button:hover{background:linear-gradient(110deg,#856439,#59412a);border-color:#ffe0a1}
+.game .left button.active,.game .bottom button.active{background:linear-gradient(110deg,#587444,#304c31);border-color:#ffe3a1;box-shadow:inset 3px 0 #d9bb70,inset 0 0 16px #9cce7833,0 3px 9px #12200e55}
+.game .bottom{border-color:#c59a55;background:#38291bcf;border-radius:12px;box-shadow:0 4px 20px #17270c66}
+.game .right .panel{border-color:#c7a269;border-radius:10px;background:linear-gradient(120deg,#f5e9cceF,#e3cda6f5);color:var(--l-ink);box-shadow:inset 0 0 0 2px #fff2d744,0 7px 18px #18200d44}
+.game .right summary,.game .right .panel>strong{color:#54401e;text-shadow:none}
+.game .right .notice{border-color:#ac8d5955;color:#5c4d32}
+.game .right .objectiveSummary{color:#746044}
+.game .right .objectiveCard{background:#fff5dbb3;border-color:#bea879;color:var(--l-ink)}
+.game .right .objectiveCard strong{color:#4d3a20}.game .right .objectiveCard p,.game .right .objectiveCard small{color:#715d3e}
+.game .right .objectiveReward{color:#6c5022}.game .right .objectiveCard.ready{background:#e6edc6;border-color:#7c9954}
+.game .right .objectiveProgress{background:#d7c69f}.game .right .objectiveProgress>div{background:linear-gradient(90deg,#557b46,#afbd68)}
+.game .right button{background:linear-gradient(#527440,#304e2e);color:#fff1ce;border-color:#8d9a5d}
+.settingsDropdown{background:linear-gradient(125deg,#5d442b,#30261b);border-color:#dab574;border-radius:12px;box-shadow:inset 0 0 0 3px #211c16,0 20px 45px #111a0ddd}
+.settingsDropdown button{background:linear-gradient(#4b613b,#2d442c);color:#ffedc4;border-color:#b99b60}
+.settingsDropdown>strong{color:#ffe6aa}.settingsDropdown .worldExtras{border-color:#c8a46566}
+.plot{border-color:#e0c28b;background:linear-gradient(#60482ceF,#35291feF);color:#fff0c8;box-shadow:inset 0 1px #f7dc9c44,0 3px 7px #18210d88;border-radius:7px}
+.plot small{color:#e5d2ad}.plot.ready{background:linear-gradient(#4b6d3cec,#2d492bec);border-color:#cfdf9e}
+.plot.busy{border-color:#f2c96d}.plot.locked{background:linear-gradient(#514d3beF,#33392ceF);color:#dfddc5}
+.popup{background:#142014ab;backdrop-filter:blur(5px)}
+.popup>.dialog,#popup>.dialog{border-color:#d2ae6b;border-radius:14px;background:linear-gradient(125deg,#f7ecd2,#e9d6ae);color:var(--l-ink);box-shadow:0 0 0 3px #38291b,0 0 0 4px #e5c68788,0 28px 90px #101b0ee0;scrollbar-color:#ad8b51 #e8d8b4}
+.popup .dialog h2,#popup .dialog>#dialogTitle{color:#5e411d;text-shadow:none}
+.popup .dialog .muted{color:var(--l-muted)}
+.popup .dialog button{border-color:#a88b53;background:linear-gradient(#547442,#304e2e);color:#fff0c7;border-radius:7px;box-shadow:inset 0 1px #ecf0b522}
+.popup .dialog button:hover:not(:disabled){filter:brightness(1.09);border-color:#d4af61}
+.popup .dialog button:disabled{opacity:.5;filter:saturate(.4)}
+.popup .dialog input,.popup .dialog textarea,.popup .dialog select{background:#fff8e8;color:#47361f;border-color:#b8a174;box-shadow:inset 0 2px 4px #614a1812;border-radius:7px}
+.popup .dialog input::placeholder,.popup .dialog textarea::placeholder{color:#8a795b;opacity:1}
+.popup .dialog .good{color:#446e31}.popup .dialog .danger{color:#a83b2b}
+#popup #dialogClose,.popup .chatTitle>button{color:#ffe9b7;background:linear-gradient(#765533,#49311f);border-color:#cca35d}
+#popup .dialog>#dialogActions{background:linear-gradient(110deg,#6b4d2d,#3a2b1c);border-color:#cba569;color:#fae7be}
+#popup .dialog>#dialogActions button{color:#fff0c9}
+/* Illustrated windows retain their artwork; reading surfaces use warm parchment. */
+#popup .buildingDetails{background:radial-gradient(ellipse at top right,#fff9e4a6,transparent 70%),linear-gradient(125deg,#f3e6c6,#e4cfa5);color:#47361f}
+#popup .buildingHeading h3{color:#573c1b}#popup .buildingHeading p,#popup .buildingFine{color:#78613d}
+#popup .buildingDetails h4{color:#87642d}#popup .buildingProduction{border-color:#a58c5a66}
+#popup .buildingProduction>p{color:#665235}#popup .productionTile{background:#fff5dba6;border-color:#b3a16e88}
+#popup .productionTile strong{color:#486b2e}#popup .productionTile small{color:#746044}
+#popup .buildingLevel{background:radial-gradient(circle,#64854a,#344e2e);border-color:#b8944e}
+#popup .buildingCostRow{background:#fff3d3b3;border-color:#b4a06c88;color:#6c5637}
+#popup .buildingCostRow strong{color:#4e6230}#popup .buildingCostRow.short strong,#popup .buildingCostRow.short small{color:#a7482d}
+#popup .buildingCallout{background:#fff4d5;border-color:#b2a075;color:#4c3b23}#popup .buildingCallout p{color:#75603e}
+#popup .buildingCallout.good{background:#e4ebc9;border-color:#8da461}
+#popup .buildingTimer{background:#f0dfb4;border-color:#bda05f;color:#684d23}
+#popup .windowPrimary{background:linear-gradient(#66874a,#385c30);color:#fff4d3}
+#popup .windowPremium{background:linear-gradient(#806095,#50385f);color:#fae8ff;border-color:#bb97ce}
+#popup .windowEyebrow{color:#8b6c35}
+#popup .buildingHero .windowEyebrow{color:#e6ce94}
+/* Consistent wood headers and moss-green workspaces for the larger studios. */
+#popup :is(.craftView,.craftHubView,.expeditionView) > #dialogTitle,
+#guildPopup .chatTitle,#socialPopup .chatTitle,#chatPopup .chatTitle{background:linear-gradient(105deg,#785632,#48321f 65%,#34291d);border-bottom-color:#d0ae6c;color:#ffebba}
+#guildPopup .chatTitle h2,#socialPopup .chatTitle h2,#chatPopup .chatTitle h2{color:#ffebba}
+#popup :is(.craftView,.craftHubView){--studio:#b99b57;--studioLight:#f6e4b2;--studioInk:#4a6038;--studioBg:#263c29}
+#popup .alchemyView{--studio:#b59acb;--studioLight:#f0dbfc;--studioInk:#594465;--studioBg:#30283b}
+#popup .craftStudioHead{background:linear-gradient(110deg,#6b794233,transparent)}
+#popup .craftView .craftDetail{background:radial-gradient(ellipse at top,#dfc98b15,transparent 70%)}
+#popup .dialog.expeditionView{background:#243c2a!important}
+#popup .forestStudio{background:radial-gradient(ellipse at top right,#74945222,transparent 60%),#223b29}
+#popup .forestTabs{background:#263b29}.popup .dialog :is(.craftStudio,.forestStudio) .windowEyebrow{color:#c8b57f}
+.popup .dialog :is(.craftStudio,.forestStudio) .muted{color:#c7d3b6}
+#popup .forestHeader{background:linear-gradient(90deg,#354f30ed,#243f2fe8),url('assets/begleiter.png') center 40%/cover}
+/* Warehouse and community: wood frame, forest furniture, parchment cards. */
+#popup .warehouseView{background:linear-gradient(125deg,#344d32,#1b3427)!important;color:#f6e5bc}
+#popup .warehouseHeader{background:linear-gradient(105deg,#73512e,#3d2d1d);border-color:#bc9a5b}
+#popup .warehouseHeader h3{color:#ffe9b7}#popup .warehouseHeader p{color:#dfcdaa}
+#popup .warehouseFooter{background:#30291c;color:#decba4}
+#guildPopup>.dialog,#socialPopup>.dialog,#chatPopup>.dialog{background:linear-gradient(125deg,#3b5235,#20392a);color:#f5e7c7}
+#guildPopup .muted,#socialPopup .muted,#chatPopup .muted{color:#c8d1b8}
+#guildPopup .dialog :is(h3,h4),#socialPopup .dialog :is(h3,h4),#chatPopup .dialog :is(h3,h4){color:#f8e2ad}
+#guildPopup input,#guildPopup textarea,#socialPopup input,#socialPopup textarea,#socialPopup select,#chatPopup input,#chatPopup textarea{background:#fff4db;color:#47361f;border-color:#bda16a}
+#guildPopup .guildIdentityCard,#socialPopup #socialProfile{background:linear-gradient(120deg,#4a613b,#2a482e);border-color:#c8a86a}
+#guildPopup .guildCard,#socialPopup .socialContact{background:linear-gradient(120deg,#405c38,#2c4931);border-color:#9d9f65}
+#chatPopup .chatMessages,#guildPopup .chatMessages{background:linear-gradient(#f4e8cd,#e7d6b0);border-color:#bca571}
+#chatPopup .chatMessage,#guildPopup .chatMessage{background:#fff5df;color:#4c3b24;border-color:#c2a875}
+#chatPopup .chatMessage.own,#guildPopup .chatMessage.own{background:#e1e9c9;color:#354929;border-color:#9bad71}
+#chatPopup .chatMessage :is(.chatBody,.chatMessageHead,.muted),#guildPopup .chatMessage :is(.chatBody,.chatMessageHead,.muted){color:#665237}
+#chatPopup .chatMessage .socialProfileLink,#guildPopup .chatMessage .socialProfileLink{color:#65451e;background:transparent;box-shadow:none}
+/* Research, premium and general reading cards. */
+#popup .researchStudio>h3{color:#62451f}#popup .researchIntro{color:#77603c}
+#popup .researchStatus{background:linear-gradient(110deg,#54703c,#314d2d);border-color:#a1a267;color:#f3e9c8}
+#popup .researchCard{background:linear-gradient(125deg,#fffae9,#eddcb6);border-color:#bda471;color:#4e3d24;box-shadow:0 4px 12px #76571c12}
+#popup .researchCard h4{color:#62451f}#popup .researchCard .researchLevel{color:#82652f}
+#popup .researchCard .researchCurrent{color:#4c6b36}#popup .researchCard .researchNext{color:#674e28}
+#popup .researchCard :is(.researchNeed,.researchReason,.researchCosts small){color:#79613b}
+#popup .researchCard .short :is(strong,small){color:#a2442f}#popup .researchCosts{border-color:#bca37166}
+#premiumPopup .premiumBalance{color:#76518b}#premiumPopup .premiumNote{color:#746044}
+#premiumPopup .premiumTask{background:#fff6e0;border-color:#bfa472}
+.popup .dialog:not(.craftView):not(.craftHubView):not(.expeditionView):not(.warehouseView):not(.buildingView):not(.questbookView) .tile{background:#fff5d9;border-color:#bda675;color:#554125}
+.popup .dialog .tile strong{color:#62461e}
+.toast{background:linear-gradient(110deg,#62472a,#38291b);border-color:#d9b66e;color:#fff0c9;border-radius:10px}
+.cloudDialog strong{color:#63461e}.cloudDialog :is(.authDivider,.cloudStatus,.tiny){color:#786342}
+.cloudDialog .authGoogle{background:#fffcf4!important;color:#3f492e!important;border-color:#b7a47b!important}
+.cloudDialog .authTabs button[aria-pressed=true]{background:linear-gradient(#765635,#48321e);border-color:#b99959}
+#popup .buildingDetails .specializations{color:#e9e3c8}#popup .buildingDetails .specializations h4{color:#ffe0a0}
+#popup .buildingDetails .specializationCard p{color:#cbd5bb}
+@media(max-width:900px){.brand img{max-height:100px}.brand .buildTag{font-size:8px;padding:2px 5px;bottom:1px;right:3%}.game .left{background:#32291bed;border:1px solid #bc9b5b;border-radius:10px}}
+@media(max-width:500px){.brand img{max-height:83px}.brand .buildTag{font-size:7px}.popup{padding:10px}.popup>.dialog,#popup>.dialog{border-radius:10px}.top .stats{border-radius:7px}}
+@media(prefers-reduced-motion:reduce){.popup .dialog{animation:none!important;scroll-behavior:auto}button{transition:none!important}}

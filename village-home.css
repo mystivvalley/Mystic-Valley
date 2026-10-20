@@ -1,0 +1,74 @@
+/* Lumertal 2.21 — village hub, separate building catalogue and map. */
+.villageHome{--sidebar:220px;--hud:96px;display:grid;grid-template-columns:var(--sidebar) minmax(0,1fr);grid-template-rows:var(--hud) minmax(0,1fr);height:100dvh;min-height:620px;overflow:hidden;background:linear-gradient(#f7ebcfdd,#e2cfaaa8),url('assets/lumertal-dorfpanorama.png') center/cover;color:#49371e}
+.villageHome [hidden]{display:none!important}
+.villageHome>.layout{display:contents}
+.villageHome .top{position:relative;inset:auto;grid-column:2;grid-row:1;display:grid;grid-template-columns:minmax(0,1fr) 150px auto;align-items:center;gap:12px;padding:14px 24px;background:linear-gradient(#ebe0c4f5,#e6d4aff0);border-bottom:1px solid #b7985e;pointer-events:auto;z-index:15}
+.villageHome .stats,.villageHome .top>.xp,.villageHome .headerTools{margin:0}
+.villageHome .top .stats{min-height:58px}.villageHome .top>.xp{min-width:0}
+.villageHome .game .left{top:auto}
+.villageHome #left{position:relative;inset:auto;grid-column:1;grid-row:1/-1;width:auto;min-width:0;max-height:none;display:flex;flex-direction:column;gap:7px;overflow-y:auto;padding:15px 12px 20px;background:linear-gradient(105deg,#4d3824f7,#30251df7);border-right:3px solid #a78248;border-radius:0;box-shadow:inset -3px 0 #e0bd6d33;z-index:20;scrollbar-color:#b99555 #3a2b1e}
+.villageHome #left .brand{width:100%;margin:0 0 19px;flex-shrink:0}
+.villageHome #left .brand img{width:100%;height:auto;max-height:150px;object-fit:contain}
+.villageHome #left .buildTag{bottom:-9px;right:6px;font-size:8px}
+.villageHome #left>.homeNavButton{min-height:48px;font:700 16px Georgia,serif;text-align:left;padding:12px 10px 12px 45px;white-space:normal}
+.villageHome #left>.homeNavButton:after{width:26px;height:26px;left:10px}
+.villageHome #left>.homeNavButton[data-icon=home]:after{background-position:33.333333% 50%}
+.villageHome #left>.homeNavButton[data-icon=hammer]:after{background-position:33.333333% 50%}
+.homeSidebarFooter{margin-top:auto;padding-top:18px;display:grid;grid-template-columns:1fr;gap:5px;border-top:1px solid #d0ad6133}
+.villageHome #left .homeSidebarFooter button{min-height:36px;padding:7px 11px;background:#291f1744;box-shadow:none;border-color:#aa8a4b44;font-size:12px}
+.villageContent{grid-column:2;grid-row:2;min-width:0;min-height:0;overflow:auto;padding:24px clamp(16px,2.5vw,45px) 35px;scrollbar-width:thin;scrollbar-color:#ae8c4e #e9dbbb}
+.homeIntro{margin-bottom:20px}.homeIntro small{font-size:9px;letter-spacing:2.5px;color:#92703a;font-weight:700}
+.homeIntro h1{font:700 clamp(26px,2.7vw,43px)/1.16 Georgia,serif;color:#52391c;text-shadow:none;margin:7px 0}
+.homeIntro p{margin:0;color:#7a6342;font-size:13px}
+.homePage,.homeBuildingPage,.homeMapPage{max-width:1640px;margin:auto}
+.homeUpper{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:19px;align-items:stretch}
+.homePanorama{position:relative;min-width:0;min-height:300px;overflow:hidden;border:3px solid #b08a4b;border-radius:14px;box-shadow:0 0 0 1px #efd79e,inset 0 0 0 3px #3e2e1b,0 8px 20px #60451e22;background:#5e7e46}
+.homePanorama>img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover}
+.homeHeroCaption{position:relative;display:flex;flex-direction:column;justify-content:end;min-height:335px;height:100%;padding:70px 25px 22px;background:linear-gradient(transparent 42%,#152a18bf);color:#fff1cf}
+.homeHeroCaption small{font-size:9px;letter-spacing:2px;color:#e2d7a7}.homeHeroCaption h2{font:700 clamp(22px,2vw,32px) Georgia;margin:7px 0;text-shadow:0 2px 5px #15240e}
+.homeHeroCaption p{font-size:12px;margin:0;color:#e8edcc}
+.villageHome #questSidebar{position:static;inset:auto;width:auto;max-height:none;display:flex;flex-direction:column;gap:10px;overflow:visible;z-index:auto;padding:0;background:none;border:0;box-shadow:none}
+.villageHome #questSidebar>.panel{flex:none;min-width:0;padding:16px;border-radius:12px}
+.villageHome #questSidebar>.panel:not(details){display:none}
+.villageHome #questSidebar details{flex:1}.villageHome #questSidebar summary{font:700 21px Georgia;list-style:none;margin:0 0 11px}
+.villageHome #questSidebar summary::-webkit-details-marker{display:none}
+.villageHome #questSidebar .objectiveCard{padding:10px;margin:9px 0;border-radius:7px}
+.villageHome #questSidebar .objectiveCard strong{font-size:12px}.villageHome #questSidebar .objectiveCard small{font-size:10px}
+.villageHome #questSidebar .objectiveReward{display:block}.villageHome #questSidebar .homeAllQuests{display:none}
+.homeActions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:20px}
+.homeFeature{overflow:hidden;min-width:0;display:flex;flex-direction:column;padding:0;cursor:pointer;background:linear-gradient(#fff6df,#e8d3a8);border:2px solid #b48e50;border-radius:12px;text-align:left;color:#50391e;box-shadow:0 5px 14px #60451e1c;transition:transform .15s,box-shadow .15s}
+.homeFeature:hover{transform:translateY(-3px);box-shadow:0 9px 20px #60451e30;border-color:#8f7038}
+.homeFeatureArt{display:block;width:100%;height:125px;background-size:cover;background-repeat:no-repeat;border-bottom:1px solid #b69355}
+.featureBuildings .homeFeatureArt{background-image:url('assets/tal-panorama.png');background-size:250%;background-position:21% 33%}
+.featureProduction .homeFeatureArt{background-image:url('assets/tal-panorama.png');background-size:240%;background-position:60% 48%}
+.featureExplore .homeFeatureArt{background-image:url('assets/nebelwald-karte.png');background-position:center 45%}
+.homeFeatureInfo{display:grid;gap:6px;padding:15px 17px}.homeFeatureInfo strong{font:700 23px Georgia}.homeFeatureInfo>span{font-size:12px;color:#7c643e}.homeFeatureInfo .homeFeatureLink{color:#496b33;font-size:10px;margin-top:4px;font-weight:700}
+.homeProduction{padding:20px;margin-top:20px;border:1px solid #b69a63;border-radius:12px;background:linear-gradient(120deg,#fff5dfeb,#eddcb6eF);box-shadow:0 4px 12px #60451e14}
+.homeSectionHeading{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:14px}
+.homeSectionHeading h2{font:700 24px Georgia;margin:0;color:#5c411f}
+.homeSectionHeading>button,.homeQuickLinks button{background:#fff8e655;border:1px solid #b89b5c77;color:#4c6832;border-radius:7px;padding:9px 12px;font-size:11px;font-weight:600;cursor:pointer}
+.homeSectionHeading>button:hover,.homeQuickLinks button:hover{background:#e5eac8}
+.homeJobs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.homeProductionEmpty{grid-column:1/-1;padding:12px 0;color:#73603c}.homeProductionEmpty>span{font:700 17px Georgia}.homeProductionEmpty p{font-size:12px;margin:5px 0}
+.homeJob{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px 15px;border:1px solid #c9b27d;border-radius:8px;padding:13px;background:#fff9e6;color:#574124;text-align:left;cursor:pointer}
+.homeJob>small{grid-column:1/-1;font-size:8px;letter-spacing:1.3px;color:#8d744a}.homeJob strong{grid-column:1/-1;font:700 17px Georgia}
+.homeJob progress{width:100%;height:11px;align-self:center;accent-color:#60883b;border:0;border-radius:9px;overflow:hidden}
+.homeJob progress::-webkit-progress-bar{background:#daccaa;border-radius:9px}.homeJob progress::-webkit-progress-value{background:linear-gradient(90deg,#547d38,#a8bd58);border-radius:9px}
+.homeJobTime{font:11px system-ui;color:#76603b;font-variant-numeric:tabular-nums}
+.homeQuickLinks{display:flex;flex-wrap:wrap;gap:9px;margin-top:17px}.homeSectionNote{font-size:13px;line-height:1.6;color:#79603a;margin:0 0 20px}
+.homeBuildingGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.homeBuildingCard{display:flex;flex-direction:column;gap:9px;padding:0 0 15px;overflow:hidden;text-align:left;background:#f8edcf;border:1px solid #b79a60;border-radius:11px;color:#503b20;cursor:pointer}
+.homeBuildingCard:hover{border-color:#6f8b44;box-shadow:0 4px 14px #60451e26}.homeBuildingArt{display:block;height:135px;width:100%;background-image:url('assets/tal-panorama.png');background-size:400% 300%;border-bottom:1px solid #b79a60}
+.homeBuildingCard>strong{font:700 21px Georgia;padding:0 16px}.homeBuildingRole{padding:0 16px;font-size:11px;line-height:1.5;flex:1;color:#7d6640}
+.homeBuildingStatus{padding:8px 16px 0;font-size:11px;color:#4f6f34;font-weight:700}.homeBuildingCard.isLocked .homeBuildingArt{filter:saturate(.35)}.homeBuildingCard.isLocked .homeBuildingStatus{color:#8d7249}
+.villageHome .homeMapPage .mainmap{position:relative;inset:auto;z-index:0;width:100%;height:620px;min-height:0;aspect-ratio:auto;border:2px solid #b28e50;border-radius:12px;overflow:auto;background:#26472f;box-shadow:0 6px 20px #46321826}
+.villageHome .homeMapPage .mapCanvas{width:1250px;height:820px;min-width:1250px;min-height:820px}
+.villageHome .homeMapPage .plot{font-size:11px;max-width:150px}.villageHome .homeMapPage .plot small{display:block}
+.villageHome #bottom,.villageHome #questToggle{display:none!important}
+.villageHome .elfGuide{left:calc(var(--sidebar) + 15px);bottom:15px;z-index:25}.villageHome #mobileNav{display:none}
+.homeSkip{position:fixed;top:-80px;left:240px;z-index:100;background:#fff1cb;color:#3c2c18;padding:12px;border:2px solid #9c8244}.homeSkip:focus{top:10px}
+@media(min-width:1700px){.homeUpper{grid-template-columns:minmax(0,1fr) 330px}.homeHeroCaption{min-height:390px}.homeFeatureArt{height:160px}}
+@media(max-width:1200px){.villageHome{--sidebar:185px}.villageHome #left>.homeNavButton{font-size:14px;min-height:45px}.villageHome .top{padding:12px 16px;gap:8px;grid-template-columns:minmax(0,1fr) 125px auto}.villageHome .top .headerTools{gap:3px}.villageHome .headerTools button{width:36px;min-width:36px;height:42px;min-height:42px}.homeUpper{grid-template-columns:minmax(0,1fr) 255px;gap:14px}.homeHeroCaption{min-height:320px}.homeFeatureArt{height:105px}.homeFeatureInfo{padding:13px}.homeFeatureInfo strong{font-size:21px}.homeBuildingGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:900px){.villageHome{--sidebar:0px;--hud:132px;min-height:500px;grid-template-columns:minmax(0,1fr)}.villageHome .top{grid-column:1;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto;padding:8px 12px;gap:7px;align-items:center;background:linear-gradient(#e9dcbe,#e1cfa9);pointer-events:auto}.villageHome .stats{grid-row:1;grid-column:1/-1;min-height:48px!important}.villageHome .top>.xp{grid-column:1;grid-row:2;margin:0;padding:5px 9px;min-height:42px;display:grid;grid-template-columns:95px minmax(0,1fr);gap:3px 9px}.villageHome .headerTools{grid-column:2;grid-row:2;margin:0}.villageHome .xp #xptxt{position:static;grid-column:2;font-size:8px}.villageHome #mobileNav{display:block}.villageHome .top .stats .resource{padding:5px 3px}.villageHome .top .resource strong{font-size:12px}.villageHome .top .resource small{font-size:9px}.villageHome .top .resource .resIcon{width:22px;height:22px}.villageHome #left{display:none;position:fixed;left:0;top:var(--hud);bottom:0;width:240px;max-height:none;grid-column:auto;grid-row:auto;box-shadow:15px 0 35px #1d291755;border-right:2px solid #b6995d;padding:15px;z-index:20}.villageHome #left.mobileOpen{display:flex}.villageHome #left .brand img{max-height:110px}.villageContent{grid-column:1;padding:20px 16px 30px}.homeUpper{grid-template-columns:minmax(0,1fr)}.homeHeroCaption{min-height:270px}.homePanorama{min-height:270px}.villageHome #questSidebar{display:block;max-height:none;width:auto}.villageHome #questSidebar details{padding:16px}.villageHome #questSidebar #objectives{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.villageHome #questSidebar #objectives>.objectiveSummary{grid-column:1/-1}.villageHome #questSidebar .objectiveCard{margin:0}.homeFeatureArt{height:110px}.homeFeatureInfo>span{font-size:11px}.homeFeatureInfo strong{font-size:19px}.homeActions{gap:10px}.villageHome .elfGuide{left:8px;bottom:10px;width:min(390px,calc(100% - 16px))}.villageHome .settingsDropdown{top:var(--hud)}.homeSkip{left:10px}.villageHome .homeMapPage .mainmap{height:600px}.homeSectionHeading{flex-wrap:wrap}.homeQuickLinks button{flex:1;white-space:nowrap}}
+@media(max-width:540px){.homeIntro h1{font-size:28px}.homeIntro p{font-size:12px}.villageContent{padding:17px 11px 25px}.homeHeroCaption{min-height:230px;padding:70px 17px 18px}.homePanorama{min-height:230px}.homeHeroCaption h2{font-size:24px}.homeHeroCaption p{font-size:11px}.homeActions{grid-template-columns:1fr;gap:11px}.homeFeature{flex-direction:row;min-height:110px}.homeFeatureArt{height:auto;width:35%;flex-shrink:0;border-bottom:0;border-right:1px solid #b69355}.homeFeatureInfo{padding:13px;flex:1}.homeFeatureInfo strong{font-size:22px}.homeJobs{grid-template-columns:1fr}.homeProduction{padding:15px}.homeSectionHeading h2{font-size:22px}.homeBuildingGrid{grid-template-columns:1fr}.villageHome #questSidebar #objectives{grid-template-columns:1fr}.homeBuildingArt{height:165px}.villageHome .top .resource .resIcon{width:17px;height:17px}.villageHome .top .resource strong{font-size:10px}.villageHome .top .resource small{font-size:7px}.villageHome .headerTools button{min-width:33px;width:33px}.homeHeroCaption small{font-size:8px}.homeFeatureLink{margin-top:0!important}}
+@media(prefers-reduced-motion:reduce){.homeFeature{transition:none}.homeFeature:hover{transform:none}}

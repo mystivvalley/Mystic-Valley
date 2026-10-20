@@ -1,0 +1,2 @@
+/* Avatar decoration only. Account values and online actions are unchanged. */
+(()=>{'use strict';const avatar=document.getElementById('socialAvatar');if(!avatar)return;const symbols={'🌿':'leaf','🦊':'fox','🦉':'owl','🐱':'cat','🐉':'dragon','🍄':'mushroom','🌙':'moon','⭐':'star'};function paint(){const key=symbols[avatar.textContent.trim()];if(key)avatar.dataset.avatar=key;else delete avatar.dataset.avatar;}new MutationObserver(paint).observe(avatar,{childList:true,characterData:true,subtree:true});paint();})();

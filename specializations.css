@@ -1,0 +1,12 @@
+.buildingStars{display:flex;flex-wrap:wrap;gap:3px;max-width:100%}
+.buildingStars span{font-size:16px}
+.specializations{margin:16px 0;padding:15px;border:1px solid #ad8b4d;border-radius:10px;background:linear-gradient(135deg,#294632,#122b22)}
+.specializations h4{margin:5px 0;color:#ffe0a0;font:700 20px Georgia,serif}
+.specializationChoices{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.specializationCard{padding:12px;border:1px solid #6d8665;border-radius:8px;background:#11291fd9;display:flex;flex-direction:column;gap:8px;min-width:0}
+.specializationCard.selected{border-color:#f1ce79;box-shadow:inset 0 0 20px #d4b15b20}
+.specializationCard strong{font:700 17px Georgia,serif;color:#ffe3a2}
+.specializationCard p{font-size:12px;line-height:1.5;flex:1}
+.specializationCard button{text-align:center!important}
+.specializationHint{font-size:12px;color:#d7cda8;margin-top:12px!important}
+@media(max-width:600px){.specializationChoices{grid-template-columns:1fr}.specializations{padding:11px}.buildingStars span{font-size:13px}}

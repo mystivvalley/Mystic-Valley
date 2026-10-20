@@ -3,12 +3,23 @@ const $=id=>document.getElementById(id), nav=window.mysticNavigation;
 const contents=$('settingsContents');
 const extras=document.createElement('details');extras.className='worldExtras';
 const heading=document.createElement('summary');heading.textContent='Weitere Spielbereiche';extras.append(heading);
-const keep=['Übersicht','Forschung','Handel','Questbuch','Gildenhaus','Dorfsiegel'];
+const keep=['Freunde','Übersicht','Forschung','Handel','Questbuch','Gildenhaus','Dorfsiegel'];
 for(const b of [...$('left').children]){
  if(b.id==='expeditionNav'||keep.some(k=>b.textContent.includes(k)))continue;
  extras.append(b);
 }
 contents.append(extras);
+// Restore direct map controls, retaining the original buttons and handlers.
+const bottom=$('bottom');
+for(const [oldName,newName,description] of [
+ ['Ressourcen','Freischaltungen','Deine nächsten Meilensteine'],
+ ['Forschung','Karte','Orte & Gebäude im Tal']
+]){
+ const oldButton=[...bottom.children].find(b=>b.textContent.includes(oldName));
+ const existing=[...extras.children].find(b=>b.tagName==='BUTTON'&&b.textContent.includes(newName));
+ if(oldButton&&existing){const hint=document.createElement('small');hint.textContent=description;existing.append(hint);oldButton.replaceWith(existing);}
+}
+
 // Production status remains available without another bar outside the map.
 const status=document.createElement('details');status.className='worldExtras';
 const label=document.createElement('summary');label.textContent='Laufende Produktion';status.append(label,$('craftOverview'));contents.append(status);
@@ -16,7 +27,7 @@ $('headerAchievements').onclick=nav.achievements;
 $('chatOpen').textContent='✉';$('chatOpen').title='Nachrichten · Globaler Chat & Privatnachrichten';$('chatOpen').setAttribute('aria-label',$('chatOpen').title);
 $('settingsToggle').title='Menü · Einstellungen & Konto';
 // Raster icons remain consistent across Windows, phones and Linux.
-const iconFor=text=>/Begleiter|Expedition/.test(text)?'paw':/Forschung/.test(text)?'flask':/Handel/.test(text)?'scales':/Quest|Aufträge/.test(text)?'scroll':/Ressourcen/.test(text)?'gold':/Spezial|Dorfsiegel/.test(text)?'star':/Lager/.test(text)?'wood':/Gilden/.test(text)?'trophy':'gear';
+const iconFor=text=>/Begleiter|Expedition/.test(text)?'paw':/Freischaltungen/.test(text)?'star':/Karte/.test(text)?'scroll':/Freunde/.test(text)?'trophy':/Forschung/.test(text)?'flask':/Handel/.test(text)?'scales':/Quest|Aufträge/.test(text)?'scroll':/Ressourcen/.test(text)?'gold':/Spezial|Dorfsiegel/.test(text)?'star':/Lager/.test(text)?'wood':/Gilden/.test(text)?'trophy':'gear';
 for(const b of document.querySelectorAll('#left>button,#bottom>button')){
  b.dataset.icon=iconFor(b.textContent);
  const t=b.firstChild;if(t?.nodeType===3)t.textContent=t.textContent.replace(/^[^\p{L}\p{N}]+/u,'');

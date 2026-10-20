@@ -4,15 +4,15 @@ const URL='https://jsczrhflonkqvbhctcwk.supabase.co';
 const KEY='sb_publishable_76tCxCjmtKvTUZTEKO1LjA_Pc9PGTWN';
 const $=id=>document.getElementById(id), bridge=window.mysticValleySaveBridge;
 const META='mv_sync_meta_v1', BACKUPS='mv_cloud_backups_v1';
-let client,user,active=null,revision=null,ready=false,busy=false,epoch=0,pending=false,account=null,authTab='login';
+let client,user,active=null,revision=null,ready=false,busy=false,epoch=0,pending=false,account=null,authTab='login',sessionKnown=false;
 const read=k=>{try{return JSON.parse(localStorage.getItem(k)||'null')}catch{return null}};
 const say=(text,error=false)=>{$('sbFeedback').textContent=text;$('sbFeedback').className=error?'danger':'muted';$('cloudStatus').textContent=text};
-function pause(value,showDialog=true){document.querySelector('.game').inert=value;$('sbClose').disabled=value;if(value&&showDialog)$('cloudPopup').hidden=false;authUI();window.dispatchEvent?.(new Event('mv-cloud-state'));}
+function pause(value){document.querySelector('.game').inert=value;$('sbClose').disabled=value;authUI();window.dispatchEvent?.(new Event('mv-cloud-state'));}
 function backup(snapshot=bridge.snapshot()){const entries=read(BACKUPS)||[];entries.unshift({at:new Date().toISOString(),owner:read(META)?.owner||null,save:snapshot});localStorage.setItem(BACKUPS,JSON.stringify(entries.slice(0,5)));}
 function exportBackup(){const b=read(BACKUPS)?.[0];if(!b)throw Error('Noch keine Sicherung vorhanden.');const a=document.createElement('a'),u=window.URL.createObjectURL(new Blob([JSON.stringify(b.save,null,2)],{type:'application/json'}));a.href=u;a.download='mystic-valley-sicherung.json';a.click();setTimeout(()=>window.URL.revokeObjectURL(u),1000);}
 function mark(snapshot){localStorage.setItem(META,JSON.stringify({owner:active,revision,lastTick:snapshot.lastTick}));}
 async function fetchSave(){const {data,error}=await client.from('player_saves').select('save_data,revision,updated_at').eq('user_id',user.id).maybeSingle();if(error)throw error;return data;}
-function conflict(){ready=false;pause(true);say('Ein anderes Gerät hat inzwischen gespeichert. Dein lokaler Stand bleibt erhalten. Bitte „Cloud-Stand übernehmen“ wählen; vorher wird er automatisch gesichert.',true);}
+function conflict(){ready=false;pause(true);$('cloudPopup').hidden=false;say('Ein anderes Gerät hat inzwischen gespeichert. Dein lokaler Stand bleibt erhalten. Bitte „Cloud-Stand übernehmen“ wählen; vorher wird er automatisch gesichert.',true);}
 const payments=paymentProtocol({client:()=>client,bridge,current:()=>({owner:user?.id,epoch,revision,ready}),setRevision:(rev,snapshot)=>{revision=rev;active=user.id;mark(snapshot);},backup,conflict,pause,say});
 const premium=premiumProtocol({client:()=>client,bridge,current:()=>({owner:user?.id,epoch,revision,ready}),setRevision:(rev,snapshot)=>{revision=rev;active=user.id;mark(snapshot);},backup,conflict,pause,say});
 export async function donateToGuild(guild,project,resource,amount){
@@ -48,9 +48,9 @@ async function saveCloud(){
 }
 async function initialize(forceCloud=false){
  if(busy){pending=true;return;}
- ready=false;pause(true,false);busy=true;const token=epoch,owner=user?.id;if(!owner){busy=false;return;}
+ ready=false;pause(true);busy=true;const token=epoch,owner=user?.id;if(!owner){busy=false;return;}
  try{
-  say('☁️ Konto wird geprüft …');const profile=await client.rpc('mv_account_v1');if(token!==epoch||user?.id!==owner)return;if(profile.error)throw profile.error;account=profile.data;authUI();if(!account?.username){pause(true);say('Bitte zuerst einen eindeutigen Benutzernamen festlegen.');return;}say('☁️ Spielstand wird geprüft …');if(payments.pending(owner))await payments.recover(owner,token);if(premium.pending(owner))await premium.recover(owner,token);const row=await fetchSave();if(token!==epoch||user?.id!==owner)return;
+  say('☁️ Konto wird geprüft …');const profile=await client.rpc('mv_account_v1');if(token!==epoch||user?.id!==owner)return;if(profile.error)throw profile.error;account=profile.data;authUI();if(!account?.username){$('cloudPopup').hidden=false;say('Bitte zuerst einen eindeutigen Benutzernamen festlegen.');return;}say('☁️ Spielstand wird geprüft …');if(payments.pending(owner))await payments.recover(owner,token);if(premium.pending(owner))await premium.recover(owner,token);const row=await fetchSave();if(token!==epoch||user?.id!==owner)return;
   const local=bridge.snapshot(),meta=read(META);
   if(row){
    if(!Number.isSafeInteger(row.revision))throw Error('Bitte zuerst supabase_update_2_1.sql im SQL Editor ausführen.');
@@ -64,17 +64,17 @@ async function initialize(forceCloud=false){
    }
    revision=null;
   }
-  active=owner;mark(sameSnapshot());ready=true;pause(false);say('🟢 Angemeldet · automatische Speicherung aktiv');
- }catch(e){pause(true);say('Cloud konnte nicht geladen werden: '+e.message+' · „Erneut prüfen“ anklicken.',true);}
+  active=owner;mark(sameSnapshot());ready=true;pause(false);$('cloudPopup').hidden=true;say('🟢 Angemeldet · automatische Speicherung aktiv');
+ }catch(e){$('cloudPopup').hidden=false;say('Cloud konnte nicht geladen werden: '+e.message+' · „Erneut prüfen“ anklicken.',true);}
  finally{busy=false;bridge.hold(false);pause(!ready);if(pending){pending=false;queueMicrotask(()=>guard(()=>initialize()));}}
  if(ready)await saveCloud();
 }
 function sameSnapshot(){return bridge.snapshot();}
-async function guard(fn){try{await fn()}catch(e){if(!ready)pause(true);say(e.message||String(e),true);}}
+async function guard(fn){try{await fn()}catch(e){$('cloudPopup').hidden=false;say(e.message||String(e),true);}}
 function sessionChanged(next){
- const id=next?.id||null;if(id===user?.id&&id===active)return;
- user=next;account=null;epoch++;ready=false;bridge.setOnlineGuild(null,{});pause(true,!user);
- if(user){active=null;guard(()=>initialize());}else{active=null;say('Bitte anmelden oder als Gast lokal spielen.');}
+ const id=next?.id||null;if(sessionKnown&&id===(user?.id||null)){user=next;return;}sessionKnown=true;
+ user=next;account=null;epoch++;ready=false;bridge.setOnlineGuild(null,{});pause(true);
+ if(user){active=null;guard(()=>initialize());}else{active=null;$('cloudPopup').hidden=false;say('Bitte anmelden oder als Gast lokal spielen.');}
 }
 $('cloudOpen').onclick=()=>{$('cloudPopup').hidden=false};$('sbClose').onclick=()=>{$('cloudPopup').hidden=true};
 $('sbGuest').onclick=()=>{if(user){say('Zum lokalen Gastmodus bitte erst abmelden.',true);return;}pause(false);$('cloudPopup').hidden=true;say('Lokaler Gastmodus · keine Cloud-Sicherung');};
@@ -122,7 +122,7 @@ $('sbLogout').onclick=()=>guard(async()=>{if(busy)throw Error('Bitte warten, die
 $('sbUpload').onclick=()=>guard(async()=>{if(!ready)throw Error('Bitte zuerst den Cloud-Stand prüfen oder übernehmen.');await saveCloud();});
 $('sbDownload').onclick=()=>guard(async()=>{if(!user)throw Error('Bitte anmelden.');if(busy)throw Error('Bitte laufende Anfrage abwarten.');if(!confirm('Cloud-Stand übernehmen? Dein lokaler Stand wird vorher intern gesichert.'))return;await initialize(true);});
 $('sbBackup').onclick=()=>guard(async()=>exportBackup());
-async function connect(){if(client){if(user)await initialize();return;}pause(true,false);say('Verbindung wird aufgebaut …');if(!window.supabase)await new Promise((resolve,reject)=>{const tag=document.createElement('script');tag.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';tag.onload=resolve;tag.onerror=()=>{tag.remove();reject(Error('Verbindung fehlgeschlagen. Internet prüfen.'))};document.head.append(tag)});client=window.supabase.createClient(URL,KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,flowType:'pkce'}});client.auth.onAuthStateChange((_event,session)=>{setTimeout(()=>sessionChanged(session?.user||null),0)});const {data,error}=await client.auth.getSession();if(error)throw error;sessionChanged(data.session?.user||null);}
+async function connect(){if(client){if(user)await initialize();return;}pause(true);say('Verbindung wird aufgebaut …');if(!window.supabase)await new Promise((resolve,reject)=>{const tag=document.createElement('script');tag.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';tag.onload=resolve;tag.onerror=()=>{tag.remove();reject(Error('Verbindung fehlgeschlagen. Internet prüfen.'))};document.head.append(tag)});client=window.supabase.createClient(URL,KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,flowType:'pkce'}});client.auth.onAuthStateChange((_event,session)=>{setTimeout(()=>sessionChanged(session?.user||null),0)});const {data,error}=await client.auth.getSession();if(error)throw error;sessionChanged(data.session?.user||null);}
 $('sbRetry').onclick=()=>guard(connect);
 setInterval(()=>guard(saveCloud),30000);
 window.addEventListener('online',()=>guard(()=>ready?saveCloud():user?initialize():connect()));

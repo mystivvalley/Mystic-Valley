@@ -119,3 +119,87 @@ body{background:#2c2119}
 @media(max-width:1200px){.villageHome .top .resource .resIcon{width:27px;height:27px}.villageHome #left>.homeNavButton[data-icon]:after{width:29px;height:29px}}
 @media(max-width:900px){.villageHome .top{background:linear-gradient(#43301f,#2c2119)}.villageHome .top .resource .resIcon{width:25px;height:25px}.villageHome #left>.homeNavButton[data-icon]:after{width:31px;height:31px}}
 @media(max-width:540px){.villageHome .top .resource .resIcon{width:20px;height:20px}.villageHome .headerTools [data-icon]:after{width:25px;height:25px}}
+
+/* Lumertal window furnishings: walnut, gold and parchment, shared across all panels. */
+.popup{background:#1f170fbd;backdrop-filter:blur(5px)}
+.popup>.dialog,#popup>.dialog,#popup .dialog.warehouseView,#popup .dialog.expeditionView,#guildPopup>.dialog,#socialPopup>.dialog,#chatPopup>.dialog{background-color:#3c2b1d!important;background-image:linear-gradient(110deg,#513720cf,#302219e8),url('assets/lumertal-quiet-wood.png')!important;background-size:auto,700px auto!important;color:#f1dfbc;border-color:#c39a57;box-shadow:0 0 0 3px #2c1c11,0 0 0 4px #d6b37266,0 25px 80px #0d0906d9}
+.popup .dialog :is(h2,h3,h4),#popup .dialog>#dialogTitle{color:#f3d69c;text-shadow:none}
+.popup .dialog .muted,.cloudDialog :is(.authDivider,.cloudStatus,.tiny){color:#d1b992}
+.popup .dialog button,#popup #dialogClose,.popup .chatTitle>button,.settingsDropdown button{background:linear-gradient(#795632,#49311e);color:#fff0ca;border:1px solid #b78e4f;box-shadow:inset 0 1px #f6d59255,inset 0 -2px #281a1055;border-radius:6px}
+.popup .dialog button:hover:not(:disabled){background:linear-gradient(#987143,#604326);border-color:#e6c17f;filter:none}
+.popup .dialog button[aria-pressed=true],.popup .dialog button.selected,.popup .dialog button.windowPrimary{background:linear-gradient(#b58a48,#79552c);color:#fff2cf;border-color:#e5c585;box-shadow:inset 0 1px #ffe5a088}
+.popup .dialog button:disabled{opacity:.5;filter:saturate(.5)}
+.popup .dialog button.windowPremium{background:linear-gradient(#79603d,#503a27);color:#f4dff7;border-color:#b29992}
+.popup .dialog :is(input,textarea,select){background:#f6e7c5;color:#49321a;border-color:#b18d52;box-shadow:inset 0 2px 4px #6f4b211c}
+.popup .dialog :is(input,textarea)::placeholder{color:#8c724d}
+.popup .dialog :is(button,input,textarea,select):focus-visible{outline:2px solid #f4d48b;outline-offset:3px}
+.popup .dialog .good{color:#bfd98b}.popup .dialog .danger{color:#ffc0a5}
+.popup .dialog progress{accent-color:#c4a064}
+.popup .dialog .chatTitle,#popup :is(.craftView,.craftHubView,.expeditionView)>#dialogTitle,#popup .warehouseHeader{background:linear-gradient(105deg,#765130,#3f2c1d)!important;border-color:#b28d50;color:#ffe6b4}
+.popup .dialog .chatTitle h2,#popup .warehouseHeader h3{color:#ffe6b4}
+.cloudDialog strong{color:#f3d69c}.cloudDialog p,.cloudDialog label{color:#e5cda5}.cloudDialog hr{border:0;border-top:1px solid #b6925955}
+.cloudDialog .authTabs button[aria-pressed=true]{background:linear-gradient(#aa7d3c,#735029);border-color:#d6b16a}
+.cloudDialog .authGoogle{background:#f6e7c5!important;color:#49321a!important;border-color:#ba9658!important}
+/* Warehouse furniture. */
+#popup .warehouseView :is(.warehouseControls,.warehouseTabs,.warehouseFooter){background:#332418;border-color:#a57f4444;color:#d6bd94}
+#popup .warehouseView :is(.warehouseCard,.warehouseCollection){background:linear-gradient(120deg,#65462b,#402c1d);border-color:#a78550;color:#f4dfb5}
+#popup .warehouseView :is(.warehouseCard,.warehouseCollection):hover{background:linear-gradient(#795533,#4c3421)}
+#popup .warehouseView :is(.warehouseCard.selected,.warehouseCollection.selected){background:linear-gradient(120deg,#8b6434,#5d4025);border-color:#e1bd75}
+#popup .warehouseView :is(.warehouseCard strong,.warehouseAmount,.warehouseCollection strong){color:#ffe4ac}
+#popup .warehouseView :is(.warehouseStockStatus,.warehousePending,.warehouseDetail p,.warehouseDetail small,.warehouseEyebrow){color:#d3b992}
+#popup .warehouseView .warehouseDetail{background:#302218a8;border-color:#b38d4e44;color:#edd6ad}
+#popup .warehouseView .warehouseRecipeDetail{background:#6b4a2426;border-color:#b68d4b44}
+#popup .warehouseView .warehouseStockToggle{color:#e5ceaa}
+/* Crafting and expeditions use the same wood; illustrations keep their colors. */
+#popup :is(.craftView,.craftHubView,.alchemyView){--studio:#c5a064;--studioLight:#f5dcac;--studioInk:#65482c;--studioBg:#39291d}
+#popup :is(.craftStudio,.forestStudio){background:linear-gradient(115deg,#4a3321,#302219)!important;color:#ead4ae}
+#popup :is(.craftCatalog,.craftDetail,.craftQueue,.forestPage,.forestTabs){background:#35261bdd!important;border-color:#b38e5044}
+#popup :is(.craftStudioHead,.forestHeader){background:linear-gradient(110deg,#725132,#47301f)!important;border-color:#b9965555}
+#popup .craftView :is(.craftCatalogCard,.craftQueueJob,.craftRecipeHero,.craftIngredient){background:linear-gradient(115deg,#604329,#3d2b1d);border-color:#a7844e66;color:#e9d5ad}
+#popup .craftView :is(.craftCatalogCard[aria-pressed=true],.craftQueueJob.running){background:linear-gradient(115deg,#846034,#533b24);border-color:#d4ad67}
+#popup :is(.craftRecipeMeta,.craftJobResult,.craftQueueSummary,.craftRecipeStatus,.craftOrderHint,.craftStudioHead p,.forestHeading p,.forestNote){color:#d1b78d!important}
+#popup .craftView :is(.craftQueueTrack,.craftQueueEmpty){background:#2b1d13;border-color:#ab8446}
+#popup .craftQueueTrack>div{background:linear-gradient(90deg,#9b733b,#f0cc7c)!important}
+#popup .craftHubCard{background:linear-gradient(115deg,#62462b,#3a281b);border-color:#af8b50;color:#edd7af}
+#popup .craftHubCard.alchemy{background:linear-gradient(115deg,#67492f,#3e2a1d);border-color:#b89a73}
+#popup .craftHubInfo>p,#popup .craftHubStatus{color:#d2b990!important}
+#popup .expeditionView :is(.teamPortraitCard,.companionCard,.forestRouteList>button,.forestReport,.miraMission,.forestRelic,.journeyMetric,.journeySupplyRow){background:linear-gradient(115deg,#62482d,#3c2a1c);border-color:#a98b53;color:#ecd7b2}
+#popup .expeditionView :is(.teamPortraitCard[aria-pressed=true],.forestRouteList>button[aria-pressed=true]){background:linear-gradient(115deg,#896638,#563c25);border-color:#ddbc75}
+#popup .expeditionView :is(.teamPortraitInfo>span,.teamPortraitInfo>small,.companionStory,.companionDetails p,.companionStats,.forestReport p,.forestReport small,.journeyDetails p,.journeyMetric small,.journeyCheck,.journeySupplyRow small,.forestTotals small){color:#d3ba91}
+#popup .expeditionView :is(.teamSelection,.companionLevel,.mapPin){background:#4b331f;border-color:#c19b5c;color:#ffe1a9}
+#popup .expeditionView :is(.forestTabs button,.forestRouteList>button){color:#ecd5ab}
+#popup .expeditionView .forestTabs button[aria-pressed=true]{background:linear-gradient(#9c753c,#674a29);color:#fff0c5;border-color:#d4b071;box-shadow:inset 0 3px #e2bd73}
+/* Community windows. */
+#guildPopup .communityBody,#socialPopup .communityBody,#chatPopup .mailBody,#chatPopup .dmSidebar{background:#34251bb8;color:#ecd6b1}
+#guildPopup :is(.guildCard,.guildProject,.guildIdentityCard,.guildFields,.guildDonation),#socialPopup :is(.socialContact,#socialProfile,.socialWelcome),#chatPopup :is(.dmContact,.dmTools){background:linear-gradient(115deg,#64472c,#3e2b1d);border-color:#ab895166;color:#ecd5ae}
+#guildPopup :is(.guildBody h3,#guildName),#socialPopup :is(#socialName,h3),#chatPopup h3{color:#f2d49c}
+#guildPopup .muted,#socialPopup .muted,#chatPopup .muted{color:#d0b78f}
+#guildPopup :is(.guildTabs,.guildBonusNotice),#chatPopup .messageTabs{background:#302117;border-color:#ad8a4f55}
+#guildPopup .guildTabs button[aria-pressed=true],#chatPopup .messageTabs button[aria-pressed=true]{background:linear-gradient(#a17a40,#6b4c29);color:#ffedbc;box-shadow:inset 0 3px #dabb78}
+#guildPopup :is(#guildRole,.guildCard small,.guildProject p,.guildProject small,.guildDonation label),#socialPopup :is(#socialGuild,#socialUsername,#socialBio,.socialContact small,.socialWelcome p),#chatPopup :is(#chatIdentity,#dmIdentity,#dmEmpty,.dmContact small){color:#d6be97}
+#guildPopup .chatMessages,#chatPopup .chatMessages{background:linear-gradient(#f5e7c8,#ddc49a);border-color:#b48f52}
+#guildPopup .chatMessages .chatMessage,#chatPopup .chatMessages .chatMessage{background:#fff1d3;color:#50391f;border-color:#c9a86b}
+#guildPopup .chatMessages .chatMessage.own,#chatPopup .chatMessages .chatMessage.own{background:#e9d4a7;color:#50391f;border-color:#b69554}
+#guildPopup .chatMessages .chatMessage :is(.chatBody,.muted),#chatPopup .chatMessages .chatMessage :is(.chatBody,.muted){color:#725635}
+/* Research and general information panels. */
+#popup .researchStudio>h3{color:#f2d49a}#popup .researchIntro{color:#d6bd94}
+#popup .researchStatus{background:linear-gradient(110deg,#755231,#46301d);border-color:#b88f4d;color:#eddbb6}
+#popup .researchStatus strong{color:#f7dfa8}
+#popup .researchCard{background:linear-gradient(115deg,#f8ebcc,#e5cca1);border-color:#b59252;color:#51381d}
+#popup .researchCard h4{color:#5a3b18}#popup .researchCard :is(.researchCurrent,.researchNext,.researchNeed,.researchReason,.researchLevel,.researchCosts small){color:#7d5e32}
+#popup .researchCard .short :is(strong,small){color:#a1462d}
+#popup .researchCard button{background:linear-gradient(#9c753e,#6a4927);color:#ffedc5;border-color:#bd9958}
+#premiumPopup .premiumBalance{color:#efd3f5}#premiumPopup .premiumNote{color:#d8bd95}
+#premiumPopup .premiumTask{background:#65432b66;border-color:#b59152;color:#efd9af}
+.popup .dialog .tile{background:#f6e7c5;color:#51391d;border-color:#b29258}
+.popup .dialog .tile strong{color:#60431e}
+#popup .buildingDetails .windowPrimary{background:linear-gradient(#a78043,#70502a);border-color:#ba9958;color:#fff1c8}
+#popup .dialog>#dialogActions{background:linear-gradient(#604126,#382619);border-color:#a47e43}
+.popup .dialog{scrollbar-color:#b08b50 #302117;scrollbar-width:thin}
+#popup .questBookPage :is(h2,h3,h4){color:#54391b}#popup .questBookPage .muted{color:#7d623a}
+#socialPopup #socialRole{background:#9d7a3c22;border-color:#b6955555;color:#eed4a3}
+/* Override legacy ID-based green buttons as well as generic dialog buttons. */
+:is(#popup,#cloudPopup,#guildPopup,#socialPopup,#chatPopup,#premiumPopup) .dialog button{background:linear-gradient(#795632,#49311e);color:#fff0ca;border-color:#b78e4f;box-shadow:inset 0 1px #f6d59255,inset 0 -2px #281a1055}
+:is(#popup,#cloudPopup,#guildPopup,#socialPopup,#chatPopup,#premiumPopup) .dialog button:hover:not(:disabled){background:linear-gradient(#987143,#604326);border-color:#e6c17f}
+:is(#popup,#cloudPopup,#guildPopup,#socialPopup,#chatPopup,#premiumPopup) .dialog button[aria-pressed=true],:is(#popup,#cloudPopup,#guildPopup,#socialPopup,#chatPopup,#premiumPopup) .dialog button.windowPrimary{background:linear-gradient(#b58a48,#79552c);color:#fff2cf;border-color:#e5c585}
+#chatPopup .chatMessage .socialProfileLink,#guildPopup .chatMessage .socialProfileLink{background:transparent;box-shadow:none;color:#65451e}

@@ -2,6 +2,12 @@
 (()=>{'use strict';
 const $=id=>document.getElementById(id),nav=window.mysticNavigation;
 if(!nav?.homeData)return;
+const ROUTE_KEY='lumertal_ui_route_v1';
+const PAGES=['home','map','buildings'],PANELS=['warehouse','research','production','expedition','guild','social','messages','quests','orders','chapter','trade','building'];
+function readRoute(){try{const r=JSON.parse(sessionStorage.getItem(ROUTE_KEY)||'null');if(r&&PAGES.includes(r.page))return {page:r.page,panel:PANELS.includes(r.panel)?r.panel:null,building:Number.isInteger(r.building)&&r.building>=0&&r.building<15?r.building:null,scroll:Number.isFinite(r.scroll)?Math.max(0,r.scroll):0,mapX:Number.isFinite(r.mapX)?Math.max(0,r.mapX):null,mapY:Number.isFinite(r.mapY)?Math.max(0,r.mapY):0};}catch{}return {page:'home',panel:null,building:null,scroll:0,mapX:null,mapY:0};}
+let savedRoute=readRoute(),restoring=true,pendingPanel=savedRoute.panel,trackingPanels=!pendingPanel,bootStateSeen=false;
+function rememberRoute(patch){savedRoute={...savedRoute,...patch};try{sessionStorage.setItem(ROUTE_KEY,JSON.stringify(savedRoute));}catch{}}
+
 const game=document.querySelector('.game'),map=document.querySelector('.mainmap');
 game.classList.add('villageHome');
 const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text)n.textContent=text;return n;};
@@ -38,14 +44,15 @@ function item(label,icon,fn,key){const b=act(label,fn,'homeNavButton');b.dataset
 item('Dorf','home',()=>view('home'),'home');item('Weltkarte','scroll',()=>view('map'),'map');item('Gebäude','hammer',()=>view('buildings'),'buildings');item('Lagerhaus','wood',nav.warehouse);item('Forschung','flask',nav.research);item('Begleiter','paw',nav.expedition);item('Gilde','trophy',()=>$('guildOpen').click());
 const footer=el('div','homeSidebarFooter');footer.append(act('📜 Aufgaben',nav.quests),act('⚖ Handel',nav.trade),act('🌿 Freunde',()=>$('socialOpen').click()));sidebar.append(footer);
 let current='home',buildingStamp='',jobStamp='';
-function view(which){current=which;home.hidden=which!=='home';buildings.hidden=which!=='buildings';world.hidden=which!=='map';for(const [key,b]of Object.entries(navItems)){b.classList.toggle('active',key===which);if(key===which)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');}sidebar.classList.remove('mobileOpen');$('mobileNav').setAttribute('aria-expanded','false');intro.querySelector('h1').textContent=which==='home'?greeting+' in Lumertal':which==='buildings'?'Das Herz deines Dorfes':'Die Welt von Lumertal';intro.querySelector('p').textContent=which==='home'?'Dein Dorf wächst. Was möchtest du heute angehen?':which==='buildings'?'Alle Gebäude, Ausbaustufen und nächsten Schritte an einem Ort.':'Dein Tal und der Weg in den Nebelwald.';paint();shell.scrollTop=0;if(which==='map')requestAnimationFrame(()=>{map.scrollLeft=Math.max(0,(map.scrollWidth-map.clientWidth)/2);});}
+function view(which){current=which;home.hidden=which!=='home';buildings.hidden=which!=='buildings';world.hidden=which!=='map';for(const [key,b]of Object.entries(navItems)){b.classList.toggle('active',key===which);if(key===which)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');}sidebar.classList.remove('mobileOpen');$('mobileNav').setAttribute('aria-expanded','false');intro.querySelector('h1').textContent=which==='home'?greeting+' in Lumertal':which==='buildings'?'Das Herz deines Dorfes':'Die Welt von Lumertal';intro.querySelector('p').textContent=which==='home'?'Dein Dorf wächst. Was möchtest du heute angehen?':which==='buildings'?'Alle Gebäude, Ausbaustufen und nächsten Schritte an einem Ort.':'Dein Tal und der Weg in den Nebelwald.';paint();if(restoring){shell.scrollTop=savedRoute.scroll;}else{pendingPanel=null;trackingPanels=true;shell.scrollTop=0;rememberRoute({page:which,panel:null,building:null,scroll:0});}if(which==='map')requestAnimationFrame(()=>{map.scrollLeft=savedRoute.mapX??Math.max(0,(map.scrollWidth-map.clientWidth)/2);map.scrollTop=savedRoute.mapY||0;});}
 // The quest journal lives on the home page; mobile uses the same readable panel.
 $('questToggle').hidden=true;const help=act('Alle Aufgaben →',nav.quests,'homeAllQuests');$('questSidebar').append(help);
 const hour=Number(new Intl.DateTimeFormat('de-DE',{timeZone:'Europe/Berlin',hour:'numeric',hourCycle:'h23'}).format(new Date()));const greeting=hour<11?'Guten Morgen':hour<18?'Willkommen':'Guten Abend';
 const skip=el('a','homeSkip','Zum Spielinhalt');skip.href='#villageContent';game.prepend(skip);
 function clock(ms){const t=Math.max(0,Math.ceil(ms/1000));return Math.floor(t/60)+':'+String(t%60).padStart(2,'0');}
 function statusText(b,d){if(d.level<b.need)return 'Ab Spielerlevel '+b.need;if(b.status==='repairing')return 'Reparatur · '+clock(b.end-Date.now());if(b.status==='ready')return 'Bereit zur Aktivierung';if(b.status==='ruined')return 'Wartet auf Reparatur';if(b.end>Date.now())return 'Ausbau · '+clock(b.end-Date.now());return b.canImprove?'Ausbau möglich':'In Betrieb · Stufe '+b.level;}
-function groupedJobs(list){const groups=new Map();for(const j of list){const key=j.station+':'+j.recipe;const old=groups.get(key);if(old){old.count++;if(old.queued&&!j.queued)Object.assign(old,j,{count:old.count});}else groups.set(key,{...j,count:1});}return [...groups.values()];}
+const RECIPE_ID_BY_NAME={'Bauholz':'planks','Verstärktes Bauholz':'beams','Kristallschliff':'quartz','Zaubertrank':'potions','Großer Zaubertrank':'elixir','Runenplatten':'runeplates','Zauberessenz':'spellessence','Schutzzauber':'ward','Mana-Essenz':'essence'};
+function groupedJobs(list){const groups=new Map();for(const input of list){const j={...input,recipe:input.recipe||RECIPE_ID_BY_NAME[input.name]||'unknown'};const key=j.station+':'+(j.recipe==='unknown'?j.name:j.recipe);const old=groups.get(key);if(old){old.count++;if(old.queued&&!j.queued)Object.assign(old,j,{count:old.count});}else groups.set(key,{...j,count:1});}return [...groups.values()];}
 function paint(){if(document.hidden)return;const d=nav.homeData();const totalJobs=d.jobs.length;d.jobs=groupedJobs(d.jobs);const active=d.buildings.filter(b=>b.status==='active').length,improve=d.buildings.filter(b=>b.canImprove).length;
 villageStatus.textContent=active+' von '+d.buildings.length+' Gebäuden in Betrieb · Spielerlevel '+d.level;
 $('homeBuildingsHint').textContent=improve?improve+' Verbesserungen möglich':active+' Gebäude in Betrieb';
@@ -58,5 +65,35 @@ const bs=JSON.stringify(d.buildings.map(b=>[b.status,b.level,b.canImprove,d.leve
 if(bs!==buildingStamp){buildingStamp=bs;buildingGrid.replaceChildren();for(const b of d.buildings){const card=act('',()=>nav.building(b.index),'homeBuildingCard');card.classList.toggle('isLocked',d.level<b.need);const art=el('span','homeBuildingArt');art.dataset.buildingArt=String(b.index);art.setAttribute('aria-hidden','true');card.append(art,el('strong','',b.name),el('span','homeBuildingRole',b.role),el('span','homeBuildingStatus',''));card.dataset.building=String(b.index);buildingGrid.append(card);}}
 for(const card of buildingGrid.children){const b=d.buildings[Number(card.dataset.building)];card.querySelector('.homeBuildingStatus').textContent=statusText(b,d);}
 }
-view('home');setInterval(paint,1000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)paint();});
+view(savedRoute.page);restoring=false;
+function visiblePanel(){
+ if(!$('guildPopup').hidden)return {panel:'guild'};
+ if(!$('socialPopup').hidden)return {panel:'social'};
+ if(!$('chatPopup').hidden)return {panel:'messages'};
+ if(!$('popup').hidden){const dialog=$('popup').querySelector('.dialog'),classes=dialog.classList;
+  if(classes.contains('buildingView'))return {panel:'building',building:Number(dialog.dataset.buildingIndex)};
+  for(const [cls,panel]of [['warehouseView','warehouse'],['researchView','research'],['expeditionView','expedition'],['craftView','production'],['craftHubView','production'],['questbookView','quests']])if(classes.contains(cls))return {panel};
+  const title=$('dialogTitle').textContent;
+  if(/Auftragsbrett|Aufträge/.test(title))return {panel:'orders'};
+  if(/Dorfsiegel/.test(title))return {panel:'chapter'};
+  if(/Handel/.test(title))return {panel:'trade'};
+ }
+ return {panel:null,building:null};
+}
+function trackPanel(){if(trackingPanels)rememberRoute(visiblePanel());}
+const routeObserver=new MutationObserver(trackPanel);
+for(const id of ['popup','guildPopup','socialPopup','chatPopup'])routeObserver.observe($(id),{attributes:true,attributeFilter:['hidden']});
+routeObserver.observe($('popup').querySelector('.dialog'),{attributes:true,attributeFilter:['class','data-building-index']});
+routeObserver.observe($('dialogTitle'),{childList:true,subtree:true,characterData:true});
+function restorePanel(){if(!pendingPanel||!bootStateSeen||game.inert||!$('cloudPopup').hidden)return;
+ const panel=pendingPanel;pendingPanel=null;trackingPanels=true;
+ if(['guild','social','messages'].includes(panel)&&$('authProfilePanel').hidden){rememberRoute({panel:null,building:null});return;}
+ const openers={warehouse:nav.warehouse,research:nav.research,production:nav.production,expedition:nav.expedition,guild:()=>$('guildOpen').click(),social:()=>$('socialOpen').click(),messages:()=>$('chatOpen').click(),quests:nav.quests,orders:nav.orders,chapter:nav.chapter,trade:nav.trade,building:()=>{if(savedRoute.building!==null)nav.building(savedRoute.building);}};
+ openers[panel]?.();
+}
+window.addEventListener('mv-cloud-state',()=>{bootStateSeen=true;setTimeout(restorePanel,0);});
+let scrollQueued=false;shell.addEventListener('scroll',()=>{if(scrollQueued)return;scrollQueued=true;requestAnimationFrame(()=>{scrollQueued=false;rememberRoute({page:current,scroll:shell.scrollTop});});},{passive:true});
+map.addEventListener('scroll',()=>rememberRoute({mapX:map.scrollLeft,mapY:map.scrollTop}),{passive:true});
+window.addEventListener('pagehide',()=>{const panel=trackingPanels?visiblePanel():{panel:pendingPanel};rememberRoute({...panel,page:current,scroll:shell.scrollTop,mapX:map.scrollLeft,mapY:map.scrollTop});});
+setInterval(paint,1000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)paint();});
 })();

@@ -1,0 +1,25 @@
+/* 2.22.2 — distinct art for every recipe and compact grouped production jobs. */
+:root{--craft-atlas:url('assets/lumertal-craft-items.png')}
+.craftArt[data-craft-icon],.windowResourceIcon[data-resource=planks],.windowResourceIcon[data-resource=potions],.windowResourceIcon[data-resource=runeplates],.windowResourceIcon[data-resource=spellessence],.windowResourceIcon[data-resource=ward],.warehouseIcon[data-resource=planks],.warehouseIcon[data-resource=potions],.warehouseIcon[data-resource=runeplates],.warehouseIcon[data-resource=spellessence],.warehouseIcon[data-resource=ward],.warehouseDetailIcon[data-resource=planks],.warehouseDetailIcon[data-resource=potions],.warehouseDetailIcon[data-resource=runeplates],.warehouseDetailIcon[data-resource=spellessence],.warehouseDetailIcon[data-resource=ward]{background-image:var(--craft-atlas);background-size:300% 300%;background-repeat:no-repeat;font-size:0;color:transparent;filter:drop-shadow(0 2px 2px #281b1744)}
+.craftArt[data-craft-icon=planks],[data-resource=planks].windowResourceIcon,[data-resource=planks].warehouseIcon,[data-resource=planks].warehouseDetailIcon{background-position:0 0}
+.craftArt[data-craft-icon=beams]{background-position:50% 0}
+.craftArt[data-craft-icon=quartz]{background-position:100% 0}
+.craftArt[data-craft-icon=potions],[data-resource=potions].windowResourceIcon,[data-resource=potions].warehouseIcon,[data-resource=potions].warehouseDetailIcon{background-position:0 50%}
+.craftArt[data-craft-icon=elixir]{background-position:50% 50%}
+.craftArt[data-craft-icon=runeplates],[data-resource=runeplates].windowResourceIcon,[data-resource=runeplates].warehouseIcon,[data-resource=runeplates].warehouseDetailIcon{background-position:100% 50%}
+.craftArt[data-craft-icon=spellessence],[data-resource=spellessence].windowResourceIcon,[data-resource=spellessence].warehouseIcon,[data-resource=spellessence].warehouseDetailIcon{background-position:0 100%}
+.craftArt[data-craft-icon=ward],[data-resource=ward].windowResourceIcon,[data-resource=ward].warehouseIcon,[data-resource=ward].warehouseDetailIcon{background-position:50% 100%}
+.craftArt[data-craft-icon=essence]{background-position:100% 100%}
+.craftArt[data-craft-icon=unknown]{background-image:none}
+.warehouseIcon[data-resource]{width:54px;height:54px;display:inline-block;flex-shrink:0}
+.warehouseDetailIcon[data-resource]{width:110px;height:110px;margin:0 auto 16px;display:block}
+.homeProduction .homeJobs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,300px));gap:12px;max-width:100%;min-width:0;overflow:visible;padding:0;align-items:start}
+.homeProduction .homeJob{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:7px 10px;width:100%;max-width:300px;min-width:0;padding:10px 11px 11px 55px;background:#fff4d777;border:1px solid #bd9f6266;border-radius:7px;box-shadow:inset 0 1px #fff9e8aa;cursor:pointer}
+.homeProduction .homeJob:before{content:none;display:none}
+.homeProduction .homeJob .homeJobIcon{position:absolute;left:7px;top:14px;width:40px;height:40px}
+.homeProduction .homeJob>strong{font:700 15px/1.25 Georgia;min-height:19px;overflow-wrap:anywhere}
+.homeProduction .homeJob progress{width:100%;height:9px;max-width:220px;min-width:0}
+.homeProduction .homeJob .homeJobTime{font:10px/1.3 system-ui;align-self:center;white-space:nowrap;color:#79603b}
+.homeProduction .homeProductionEmpty{grid-column:1/-1}
+@media(max-width:650px){.homeProduction .homeJobs{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}.homeProduction .homeJob{max-width:340px}}
+@media(max-width:430px){.homeProduction .homeJobs{grid-template-columns:minmax(0,1fr)}.homeProduction .homeJob{max-width:none}}

@@ -68,3 +68,54 @@
 .villageHome #left{padding-bottom:135px}.villageHome #left .brand img{max-height:120px}.homeSidebarFooter{grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;margin-top:15px}.villageHome #left .homeSidebarFooter button{font-size:9px;padding:7px 2px;text-align:center;min-width:0}
 @media(min-width:1700px){.villageHome #left>.homeNavButton{min-height:59px}.villageHome #left .brand img{max-height:135px}}
 @media(max-width:900px){.villageHome #left{padding-bottom:135px}.villageHome #left .brand img{max-height:110px}}
+
+/* Lumertal visual refinement: calm wood background and coherent UI symbols. */
+body{background:#2c2119}
+.villageHome{background-color:#30231a;background-image:linear-gradient(120deg,#2b211bd9,#30231ae8),url('assets/lumertal-quiet-wood.png');background-size:auto,900px 600px;background-position:center;background-repeat:repeat;color:#f1dfba}
+.villageHome .villageContent{background:none;scrollbar-color:#ac8750 #302219;scrollbar-width:thin}
+.villageHome .top{background:linear-gradient(#38291fee,#2d2119ee);border-bottom:1px solid #9c774533}
+.villageHome .homeIntro{background:linear-gradient(110deg,#fff0d1,#ecd5ad);background-clip:padding-box}
+.villageHome #questSidebar>.panel{background-color:#49311f;background-image:linear-gradient(110deg,#533a23b8,#34261bbf),url('assets/lumertal-quiet-wood.png');background-size:auto,650px auto;background-clip:padding-box;color:#efdbb4}
+.villageHome #questSidebar summary{color:#ffebbc;text-shadow:0 1px 2px #251a11;border-bottom:1px solid #caa46355;padding-bottom:12px}
+.villageHome #questSidebar .objectiveSummary{color:#dfc99e}
+.villageHome #questSidebar .objectiveCard{background:linear-gradient(110deg,#faedce,#e9d2a6);border-color:#c7a568;box-shadow:inset 0 0 0 2px #fff2cf66,0 3px 7px #21160e44;color:#51391e}
+.villageHome #questSidebar .objectiveCard.ready{background:linear-gradient(110deg,#eff0cc,#d9dfa9);border-color:#a5b065}
+.villageHome #questSidebar .objectiveCard strong{color:#4b3219;text-shadow:none}
+.villageHome #questSidebar .objectiveCard p,.villageHome #questSidebar .objectiveCard small{color:#74562f}
+.villageHome #questSidebar .objectiveReward{color:#88612a}
+.villageHome #questSidebar button{background:linear-gradient(#76522c,#4d331e);border-color:#c5a05c;color:#fff0c7}
+.villageHome #questSidebar .objectiveCard button{background:linear-gradient(#698342,#405b2d);border-color:#879854;color:#fff2cb}
+.villageHome .homeBuildingPage>.homeSectionHeading h2,.villageHome .homeMapPage>.homeSectionHeading h2{color:#ffe8b8;text-shadow:0 2px 3px #21160f}
+.villageHome .homeSectionNote{color:#d4bd96}
+.villageHome .homeBuildingPage>.homeSectionHeading button,.villageHome .homeMapPage>.homeSectionHeading button{background:#5a4027;color:#f6e0b2;border-color:#b89152}
+.villageHome .settingsDropdown{background-image:linear-gradient(#3d2b1aed,#2c2017f5),url('assets/lumertal-quiet-wood.png');background-size:auto,600px auto}
+.villageHome .villageContent::-webkit-scrollbar{width:10px;height:10px}
+.villageHome .villageContent::-webkit-scrollbar-track{background:#302219;border-left:1px solid #b18b4933}
+.villageHome .villageContent::-webkit-scrollbar-thumb{background:#9a7640;border:2px solid #302219;border-radius:8px}
+/* Correct semantic icons, not color-filtered substitutes from the old atlas. */
+.villageHome #left>.homeNavButton[data-icon]:after,.villageHome .headerTools [data-icon]:after,.villageHome .top .resource .resIcon{background-image:url('assets/lumertal-ui-symbols.png')!important;background-size:400% 400%!important;background-repeat:no-repeat!important;background-position:var(--ui-x,0) var(--ui-y,0)!important;filter:drop-shadow(0 2px 1px #1f160e66)!important;image-rendering:auto}
+.villageHome #left>.homeNavButton[data-icon=home]{--ui-x:0%;--ui-y:0%}
+.villageHome #left>.homeNavButton[data-icon=scroll]{--ui-x:33.333333%;--ui-y:0%}
+.villageHome #left>.homeNavButton[data-icon=hammer]{--ui-x:66.666667%;--ui-y:0%}
+.villageHome #left>.homeNavButton[data-icon=wood]{--ui-x:100%;--ui-y:0%}
+.villageHome #left>.homeNavButton[data-icon=flask]{--ui-x:0%;--ui-y:33.333333%}
+.villageHome #left>.homeNavButton[data-icon=paw]{--ui-x:33.333333%;--ui-y:33.333333%}
+.villageHome #left>.homeNavButton[data-icon=trophy]{--ui-x:66.666667%;--ui-y:33.333333%}
+.villageHome .top [data-resource=gold]{--ui-x:100%;--ui-y:33.333333%}
+.villageHome .top [data-resource=wood]{--ui-x:0%;--ui-y:66.666667%}
+.villageHome .top [data-resource=crystal]{--ui-x:33.333333%;--ui-y:66.666667%}
+.villageHome .top [data-resource=mana]{--ui-x:66.666667%;--ui-y:66.666667%}
+.villageHome .top #premiumHeader{--ui-x:100%;--ui-y:66.666667%}
+.villageHome .headerTools [data-icon=trophy]{--ui-x:0%;--ui-y:100%}
+.villageHome .headerTools [data-icon=envelope]{--ui-x:33.333333%;--ui-y:100%}
+.villageHome .headerTools [data-icon=gear]{--ui-x:66.666667%;--ui-y:100%}
+.villageHome #left>.homeNavButton[data-icon]:after{width:33px;height:33px;left:9px}
+.villageHome .top .resource .resIcon{width:33px;height:33px}
+.villageHome .headerTools [data-icon]:after{width:29px;height:29px}
+.villageHome .featureBuildings .homeFeatureInfo:before,.villageHome .featureProduction .homeFeatureInfo:before,.villageHome .featureExplore .homeFeatureInfo:before{background-image:url('assets/lumertal-ui-symbols.png');background-size:400% 400%;filter:none}
+.villageHome .featureBuildings .homeFeatureInfo:before{background-position:66.666667% 0}
+.villageHome .featureProduction .homeFeatureInfo:before{background-position:0 66.666667%}
+.villageHome .featureExplore .homeFeatureInfo:before{background-position:33.333333% 0}
+@media(max-width:1200px){.villageHome .top .resource .resIcon{width:27px;height:27px}.villageHome #left>.homeNavButton[data-icon]:after{width:29px;height:29px}}
+@media(max-width:900px){.villageHome .top{background:linear-gradient(#43301f,#2c2119)}.villageHome .top .resource .resIcon{width:25px;height:25px}.villageHome #left>.homeNavButton[data-icon]:after{width:31px;height:31px}}
+@media(max-width:540px){.villageHome .top .resource .resIcon{width:20px;height:20px}.villageHome .headerTools [data-icon]:after{width:25px;height:25px}}
